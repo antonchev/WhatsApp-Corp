@@ -19,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.concurrent.Executor;
-
 
 public class UsersPresenter {
 
@@ -31,8 +29,10 @@ public class UsersPresenter {
     private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "MainActivity";
 
+
     public UsersPresenter(UsersModel model) {
         this.model = model;
+
     }
 
     public void attachView(UsersActivity usersActivity) {
@@ -72,8 +72,14 @@ public class UsersPresenter {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            view.showToast(user.getDisplayName());
 
-                            view.updateUI(user);
+
+                   view.ChangeActivity ();
+
+
+
+                            //view.updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

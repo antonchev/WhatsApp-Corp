@@ -29,12 +29,12 @@
         android:layout_gravity="bottom">
 
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:background="#512DA8" />
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="#512DA8" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
@@ -42,6 +42,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="120dp" />
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="180dp"
+            android:text="Выход" />
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
@@ -51,6 +59,8 @@
             android:text="design by Irina K."
             android:textColor="#FFFFFF"
             android:layout_gravity="bottom"/>
+
+
 
     </FrameLayout>
 
