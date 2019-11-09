@@ -1,12 +1,12 @@
 package com.ilocator;
 
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PointF;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,25 +18,56 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
+import com.yandex.mapkit.Animation;
+import com.yandex.mapkit.MapKit;
+import com.yandex.mapkit.MapKitFactory;
+import com.yandex.mapkit.geometry.Point;
+import com.yandex.mapkit.location.FilteringMode;
+import com.yandex.mapkit.location.Location;
+import com.yandex.mapkit.location.LocationListener;
+import com.yandex.mapkit.location.LocationStatus;
+import com.yandex.mapkit.map.CameraPosition;
+import com.yandex.mapkit.mapview.MapView;
+import com.yandex.mapkit.user_location.UserLocationLayer;
+import com.yandex.mapkit.location.LocationManager;
+import com.yandex.mapkit.user_location.UserLocationView;
 
 public class UsersPresenter {
 
     private static int RC_SIGN_IN = 100;
     private UsersActivity view;
+    private MapsActivity view_map;
     private final UsersModel model;
+    public Activity activity;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "MainActivity";
+    private MapView mapView;
+    private UserLocationLayer userLocationLayer;
+    private Point routeStartLocation = new Point(0.0, 0.0);
+    public static final int COMFORTABLE_ZOOM_LEVEL = 18;
+    private static final double DESIRED_ACCURACY = 0;
+    private static final long MINIMAL_TIME = 0;
+    private static final double MINIMAL_DISTANCE = 50;
+    private static final boolean USE_IN_BACKGROUND = false;
+    private LocationManager locationManager;
+    private LocationListener myLocationListener;
+    private Point myLocation;
 
 
-    public UsersPresenter(UsersModel model) {
+    public UsersPresenter(UsersModel model, Activity activity) {
         this.model = model;
-
+        this.activity=activity;
     }
 
     public void attachView(UsersActivity usersActivity) {
         view = usersActivity;
+
+    }
+
+    public void attachViewMaps(MapsActivity mapsActivity) {
+        view_map = mapsActivity;
+
     }
 
     public void auth(Context context) {
@@ -45,14 +76,11 @@ public class UsersPresenter {
                 .requestEmail()
                 .build();
         // [END config_signin]
-
         mGoogleSignInClient = GoogleSignIn.getClient(view, gso);
-
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
        view.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -62,7 +90,6 @@ public class UsersPresenter {
         // [START_EXCLUDE silent]
         //  showProgressDialog();
         // [END_EXCLUDE]
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
@@ -73,12 +100,7 @@ public class UsersPresenter {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             view.showToast(user.getDisplayName());
-
-
-                   view.ChangeActivity ();
-
-
-
+                             view.ChangeActivity ();
                             //view.updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -86,7 +108,6 @@ public class UsersPresenter {
                             //  Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             view.updateUI(null);
                         }
-
                         // [START_EXCLUDE]
                         // hideProgressDialog();
                         // [END_EXCLUDE]
@@ -94,6 +115,73 @@ public class UsersPresenter {
                 });
     }
 
+    public  void onMapReady (){
+
+        mapView = this.activity.findViewById(R.id.mapview);
+        mapView.getMap().setRotateGesturesEnabled(true);
+        MapKit mapKit = MapKitFactory.getInstance();
+        userLocationLayer = mapKit.createUserLocationLayer(mapView.getMapWindow());
+        userLocationLayer.setVisible(true);
+        userLocationLayer.setHeadingEnabled(true);
+        //  userLocationLayer.setObjectListener(this);
+        locationManager = MapKitFactory.getInstance().createLocationManager();
+        myLocationListener = new LocationListener() {
+            @Override
+            public void onLocationUpdated(Location location) {
+                if (myLocation == null) {
+                    moveCamera(location.getPosition(), COMFORTABLE_ZOOM_LEVEL);
+                }
+                myLocation = location.getPosition();
+                //view_map.showToast(location.getPosition().getLatitude()+" + "+location.getPosition().getLongitude());
+
+            }
+            private void moveCamera(Point point, float zoom) {
+                mapView.getMap().move(
+                        new CameraPosition(point, zoom, 0.0f, 0.0f),
+                        new Animation(Animation.Type.SMOOTH, 1),
+                        null);
+            }
+
+            @Override
+            public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
+            }
+        };
+
+
+    }
+
+    public void setAnchor(UserLocationView userLocationView){
+        userLocationLayer.setAnchor(
+
+                new PointF((float)(mapView.getWidth() * 0.5), (float)(mapView.getHeight() * 0.5)),
+                new PointF((float)(mapView.getWidth() * 0.5), (float)(mapView.getHeight() * 0.83))
+
+
+        );
+        userLocationView.getAccuracyCircle().setFillColor(Color.BLUE);
+
+
+
+    }
+
+    public void cameraUserPosition(){
+
+        view_map.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
+        if(userLocationLayer.cameraPosition() != null){
+            routeStartLocation = userLocationLayer.cameraPosition().getTarget();
+            mapView.getMap().move(new CameraPosition(routeStartLocation,COMFORTABLE_ZOOM_LEVEL,0,0), new Animation(Animation.Type.SMOOTH,2),null);
+        } else
+        {
+            //  mapView.getMap().move(new CameraPosition(new Point(0, 0), 15, 0, 0));
+            //   mapView.getMap().move(new CameraPosition(routeStartLocation, 15, 0, 0));
+        }
+    }
+
+    public void subscribeToLocationUpdate() {
+        if (locationManager != null && myLocationListener != null) {
+            locationManager.subscribeForLocationUpdates(DESIRED_ACCURACY, MINIMAL_TIME, MINIMAL_DISTANCE, USE_IN_BACKGROUND, FilteringMode.OFF, myLocationListener);
+        }
+    }
 
 }
 
