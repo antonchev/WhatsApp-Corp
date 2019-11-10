@@ -109,7 +109,7 @@ public class UsersActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
         }
-        else {}
+
     }
 
     @Override
@@ -126,16 +126,12 @@ public class UsersActivity extends AppCompatActivity {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 // [START_EXCLUDE]
-                updateUI(null);
                 // [END_EXCLUDE]
             }
         }
     }
 
-    public void updateUI(Object o) {
 
-        Toast.makeText(this,""+o.toString(), Toast.LENGTH_SHORT).show();
-    }
 
 
 
