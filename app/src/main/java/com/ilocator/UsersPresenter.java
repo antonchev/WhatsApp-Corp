@@ -85,6 +85,18 @@ public class UsersPresenter {
        view.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    public void checkUser (){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(view_map, UsersActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            view_map.startActivity(intent);
+            view_map.finish(); // call this to finish the current activity
+        }
+        else {    view_map.showToast(user.getDisplayName()); }
+
+    }
+
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]

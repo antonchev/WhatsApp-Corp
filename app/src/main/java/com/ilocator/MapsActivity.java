@@ -1,12 +1,9 @@
 package com.ilocator;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.layers.ObjectEvent;
 import com.yandex.mapkit.mapview.MapView;
@@ -26,7 +23,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
 
         super.onCreate(savedInstanceState);
-        //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+
         MapKitFactory.setApiKey(MAPKIT_API_KEY);
         MapKitFactory.initialize(this);
         setContentView(R.layout.activity_maps);
@@ -67,16 +64,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         super.onStart();
         MapKitFactory.getInstance().onStart();
         mapView.onStart();
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Intent intent = new Intent(this, UsersActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish(); // call this to finish the current activity
-        }
-        else {    showToast(user.getDisplayName()); }
-
+        presenter.checkUser();
         presenter.subscribeToLocationUpdate();
     }
 
@@ -98,10 +86,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
     }
     public void onObjectUpdated(UserLocationView view, ObjectEvent event) {
 
-
     }
-
-
 
 }
 

@@ -52,7 +52,6 @@ public class UsersActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -137,9 +136,6 @@ public class UsersActivity extends AppCompatActivity {
 
         Toast.makeText(this,""+o.toString(), Toast.LENGTH_SHORT).show();
     }
-    // [END onactivityresult]
-
-    // [START auth_with_google]
 
 
 
