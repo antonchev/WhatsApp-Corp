@@ -8,11 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
@@ -97,7 +94,6 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
 
         // Check if user is signed in (non-null) and update UI accordingly.
 
