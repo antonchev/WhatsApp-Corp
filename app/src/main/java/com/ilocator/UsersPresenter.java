@@ -18,6 +18,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKit;
 import com.yandex.mapkit.MapKitFactory;
@@ -53,6 +55,7 @@ public class UsersPresenter {
     private LocationManager locationManager;
     private LocationListener myLocationListener;
     private Point myLocation;
+    public DatabaseReference mDatabase;
 
 
     public UsersPresenter(UsersModel model, Activity activity) {
@@ -80,6 +83,7 @@ public class UsersPresenter {
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_auth]
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
        view.startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -93,9 +97,20 @@ public class UsersPresenter {
             view_map.startActivity(intent);
             view_map.finish(); // call this to finish the current activity
         }
-        else {    view_map.showToast(user.getDisplayName()); }
+        else {    view_map.showToast(user.getDisplayName());
+
+
+        }
 
     }
+
+    public void writeNewUser(String userId, String name, String email,String point) {
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        UsersModel user = new UsersModel(name, email,point);
+        mDatabase.child("users").child(userId).setValue(user);
+    }
+
 
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
@@ -177,6 +192,8 @@ public class UsersPresenter {
     }
 
     public void cameraUserPosition(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        writeNewUser(user.getUid(),"Алексей","antonchev@mail.ru",myLocation.getLatitude()+" + "+myLocation.getLongitude());
 
         view_map.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
         if(userLocationLayer.cameraPosition() != null){
@@ -194,6 +211,9 @@ public class UsersPresenter {
             locationManager.subscribeForLocationUpdates(DESIRED_ACCURACY, MINIMAL_TIME, MINIMAL_DISTANCE, USE_IN_BACKGROUND, FilteringMode.OFF, myLocationListener);
         }
     }
+
+
+
 
 }
 
