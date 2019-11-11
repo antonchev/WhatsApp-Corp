@@ -104,11 +104,11 @@ public class UsersPresenter {
 
     }
 
-    public void writeNewUser(String userId, String name, String email,String point) {
+    public void writeNewUser(String userId,String point) {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        UsersModel user = new UsersModel(name, email,point);
-        mDatabase.child("users").child(userId).setValue(user);
+        UsersModel user = new UsersModel(point);
+        mDatabase.child("users").child(userId).child("location").push().setValue(user);
     }
 
 
@@ -193,7 +193,7 @@ public class UsersPresenter {
 
     public void cameraUserPosition(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        writeNewUser(user.getUid(),"Алексей","antonchev@mail.ru",myLocation.getLatitude()+" + "+myLocation.getLongitude());
+        writeNewUser(user.getUid(),myLocation.getLatitude()+" + "+myLocation.getLongitude());
 
         view_map.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
         if(userLocationLayer.cameraPosition() != null){

@@ -10,7 +10,7 @@ public class UsersModel {
 
     public UsersModel (){}
 
-    public UsersModel(String username, String email,String point) {
+    public UsersModel(String point) {
         this.username = username;
         this.email = email;
         this.myLocation = point;

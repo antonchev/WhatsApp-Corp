@@ -20,7 +20,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
     private UsersPresenter presenter;
     public MapView mapView;
-    private final String MAPKIT_API_KEY = "065d417d-f54b-479d-aee2-f7aba805f889";
+    public final String MAPKIT_API_KEY = "065d417d-f54b-479d-aee2-f7aba805f889";
 
     private UsersModel usersModel;
 
