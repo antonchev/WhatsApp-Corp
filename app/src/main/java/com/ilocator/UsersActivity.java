@@ -97,14 +97,14 @@ public class UsersActivity extends AppCompatActivity {
 
         // Check if user is signed in (non-null) and update UI accordingly.
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-          showToast(user.getDisplayName());
+     //   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    //    if (user != null) {
+     //     showToast(user.getDisplayName());
 
 
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-        }
+   //     Intent intent = new Intent(this, MapsActivity.class);
+   //     startActivity(intent);
+   //     }
 
     }
 

@@ -104,11 +104,15 @@ public class UsersPresenter {
 
     }
 
-    public void writeNewUser(String userId,String point) {
+    public void writeNewUser() {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        UsersModel user = new UsersModel(point);
-        mDatabase.child("users").child(userId).child("location").push().setValue(user);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId =  user.getUid();
+        UsersModel model = new UsersModel();
+      //  String point = (myLocation.getLatitude()+"+"+ myLocation.getLongitude());
+        mDatabase.child("users").child(userId).setValue(model);
+       // mDatabase.child("users").child(userId).child(("location")).push().setValue(point);
     }
 
 
@@ -126,7 +130,8 @@ public class UsersPresenter {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            view.showToast(user.getDisplayName());
+                            writeNewUser();
+                          //  view.showToast(user.getDisplayName());
                              view.ChangeActivity ();
                             //view.updateUI(user);
                         } else {
@@ -140,6 +145,14 @@ public class UsersPresenter {
                         // [END_EXCLUDE]
                     }
                 });
+    }
+
+    public void writeLocation() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId =  user.getUid();
+        String point = (myLocation.getLatitude()+"+"+ myLocation.getLongitude());
+        mDatabase.child("users").child(userId).child(("location")).push().setValue(point);
     }
 
     public  void onMapReady (){
@@ -159,6 +172,7 @@ public class UsersPresenter {
                     moveCamera(location.getPosition(), COMFORTABLE_ZOOM_LEVEL);
                 }
                 myLocation = location.getPosition();
+              //  writeLocation();
                 //view_map.showToast(location.getPosition().getLatitude()+" + "+location.getPosition().getLongitude());
 
             }
@@ -192,8 +206,6 @@ public class UsersPresenter {
     }
 
     public void cameraUserPosition(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        writeNewUser(user.getUid(),myLocation.getLatitude()+" + "+myLocation.getLongitude());
 
         view_map.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
         if(userLocationLayer.cameraPosition() != null){

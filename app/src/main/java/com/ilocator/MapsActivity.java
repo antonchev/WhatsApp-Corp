@@ -48,15 +48,14 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 presenter.cameraUserPosition();
-
-
-
-
+            //    presenter.writeNewUser();
                 // FirebaseAuth.getInstance().signOut();
             }
         });
         presenter.onMapReady();
+      //  presenter.writeNewUser();
 
     }
 
@@ -84,6 +83,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         mapView.onStart();
         presenter.checkUser();
         presenter.subscribeToLocationUpdate();
+
 
     }
 
