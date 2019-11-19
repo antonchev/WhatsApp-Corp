@@ -9,6 +9,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -17,8 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!--
+        <service
+            android:name=".gpsService"
+            android:enabled="true"
+            android:exported="true"></service>
+              <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
              Note that the API key is linked to the encryption key used to sign the APK.
@@ -26,8 +30,6 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-
-
         <activity
             android:name=".MapsActivity"
             android:label="@string/app_name">
@@ -39,9 +41,7 @@
         </activity>
         <activity
             android:name=".UsersActivity"
-            android:label="login">
-
-        </activity>
+            android:label="login" />
     </application>
 
 </manifest>

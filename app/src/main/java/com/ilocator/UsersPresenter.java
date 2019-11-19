@@ -218,6 +218,13 @@ public class UsersPresenter {
         }
     }
 
+
+
+        public void unsubscribeToLocationUpdate (){
+            locationManager.unsubscribe(myLocationListener);
+        }
+
+
     public void subscribeToLocationUpdate() {
         if (locationManager != null && myLocationListener != null) {
             locationManager.subscribeForLocationUpdates(DESIRED_ACCURACY, MINIMAL_TIME, MINIMAL_DISTANCE, USE_IN_BACKGROUND, FilteringMode.OFF, myLocationListener);

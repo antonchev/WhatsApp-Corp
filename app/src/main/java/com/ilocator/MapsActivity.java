@@ -1,14 +1,11 @@
 package com.ilocator;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.layers.ObjectEvent;
 import com.yandex.mapkit.mapview.MapView;
@@ -35,6 +32,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         MapKitFactory.initialize(this);
         setContentView(R.layout.activity_maps);
         init();
+
       //
         }
 
@@ -59,17 +57,15 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
     }
 
-
-
-
-
-
-
     @Override
     protected void onStop() {
         mapView.onStop();
         MapKitFactory.getInstance().onStop();
+        presenter.unsubscribeToLocationUpdate();
+        Intent intent = new Intent(this, gpsService.class);
+        startService(intent);
         super.onStop();
+
     }
 
     public void showToast(String resId) {
@@ -83,6 +79,8 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         mapView.onStart();
         presenter.checkUser();
         presenter.subscribeToLocationUpdate();
+
+
 
 
     }
