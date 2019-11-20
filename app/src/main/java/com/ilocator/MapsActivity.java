@@ -1,11 +1,16 @@
 package com.ilocator;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.layers.ObjectEvent;
 import com.yandex.mapkit.mapview.MapView;
@@ -20,7 +25,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
     public final String MAPKIT_API_KEY = "065d417d-f54b-479d-aee2-f7aba805f889";
 
     private UsersModel usersModel;
-
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         MapKitFactory.initialize(this);
         setContentView(R.layout.activity_maps);
         init();
+
 
       //
         }
@@ -57,13 +63,20 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStop() {
         mapView.onStop();
         MapKitFactory.getInstance().onStop();
         presenter.unsubscribeToLocationUpdate();
+
         Intent intent = new Intent(this, gpsService.class);
-        startService(intent);
+     //   startService(intent);
+
+
+        if (user != null)
+            startForegroundService(intent);
+
         super.onStop();
 
     }

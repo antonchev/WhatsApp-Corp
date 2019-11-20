@@ -1,23 +1,25 @@
 package com.ilocator;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -26,6 +28,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.yandex.mapkit.Animation;
+import com.yandex.mapkit.MapKitFactory;
+import com.yandex.mapkit.geometry.Point;
+import com.yandex.mapkit.location.FilteringMode;
+import com.yandex.mapkit.location.Location;
+import com.yandex.mapkit.location.LocationListener;
+import com.yandex.mapkit.location.LocationStatus;
+import com.yandex.mapkit.map.CameraPosition;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
+import static java.text.DateFormat.getDateTimeInstance;
+
 
 public class gpsService extends Service {
     private static final String TAG = "MyLocationService";
@@ -34,54 +53,16 @@ public class gpsService extends Service {
     private static final float LOCATION_DISTANCE = 10f;
     public DatabaseReference mDatabase;
     int counter = 0;
+    public static PendingIntent pendingIntent = null;
+    private LocationListener myLocationListener;
+    private Point myLocation;
+    private com.yandex.mapkit.location.LocationManager locationManager;
+    public static final int COMFORTABLE_ZOOM_LEVEL = 18;
 
-    public class LocationListener implements android.location.LocationListener {
-        Location mLastLocation;
-
-
-
-        public void writeLocation() {
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String userId =  user.getUid();
-            String point = (mLastLocation.getLatitude()+"+"+ mLastLocation.getLongitude());
-            mDatabase.child("users").child(userId).child(("location")).push().setValue(point);
-        }
-
-        public LocationListener(String provider) {
-            Log.e(TAG, "LocationListener " + provider);
-            mLastLocation = new Location(provider);
-        }
-
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.e(TAG, "onLocationChanged: " + location);
-            mLastLocation.set(location);
-            writeLocation();
-            counter ++;
-
-            if (counter ==3){
-                Log.e(TAG, "STOPPED: ");
-                stopSelf();
-            }
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            Log.e(TAG, "onProviderDisabled: " + provider);
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            Log.e(TAG, "onProviderEnabled: " + provider);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.e(TAG, "onStatusChanged: " + provider);
-        }
-    }
-
+    private static final double DESIRED_ACCURACY = 0;
+    private static final long MINIMAL_TIME = 0;
+    private static final double MINIMAL_DISTANCE = 50;
+    private static final boolean USE_IN_BACKGROUND = false;
     /*
     LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
@@ -89,11 +70,13 @@ public class gpsService extends Service {
     };
     */
 
-    LocationListener[] mLocationListeners = new LocationListener[]{
-            new LocationListener(LocationManager.PASSIVE_PROVIDER)
-    };
 
 
+    public void subscribeToLocationUpdate() {
+        if (locationManager != null && myLocationListener != null) {
+            locationManager.subscribeForLocationUpdates(DESIRED_ACCURACY, MINIMAL_TIME, MINIMAL_DISTANCE, USE_IN_BACKGROUND, FilteringMode.OFF, myLocationListener);
+        }
+    }
 
 
     @Override
@@ -101,56 +84,119 @@ public class gpsService extends Service {
         return null;
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand");
-        super.onStartCommand(intent, flags, startId);
-      //  initializeLocationManager();
 
-        return START_STICKY;
+    public static String getTimeDate(long timestamp){
+        try{
+            DateFormat dateFormat = getDateTimeInstance();
+            Date netDate = (new Date(timestamp));
+            return dateFormat.format(netDate);
+        } catch(Exception e) {
+            return "date";
+        }
+    }
+
+
+    public void writeLocation() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId =  user.getUid();
+        String point = (myLocation.getLatitude()+"+"+ myLocation.getLongitude());
+
+
+        SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+
+
+
+        HashMap<String, Object> value = new HashMap<>();
+        value.put("point", point);
+        value.put("timestamp", ServerValue.TIMESTAMP);
+        value.put("date",   sfd.format(new Date(System.currentTimeMillis())));
+
+
+        mDatabase.child("users").child(userId).child(("location")).push().setValue(value);
+    }
+
+
+
+
+    public void initializeLocationManager(){
+        locationManager = MapKitFactory.getInstance().createLocationManager();
+        myLocationListener = new LocationListener() {
+            @Override
+            public void onLocationUpdated(Location location) {
+
+                myLocation = location.getPosition();
+                Log.e(TAG, "onLocationChanged: " + myLocation.getLatitude()+" + "+myLocation.getLongitude());
+                  writeLocation();
+
+                //view_map.showToast(location.getPosition().getLatitude()+" + "+location.getPosition().getLongitude());
+                Log.e(TAG, "STOPPED: ");
+                stopSelf();
+            }
+
+            @Override
+            public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
+            }
+
+        };
+
+
+
+    }
+
+
+    public void unsubscribeToLocationUpdate (){
+        locationManager.unsubscribe(myLocationListener);
     }
 
     @Override
-    public void onCreate() {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.e(TAG, "onStartCommand");
+        super.onStartCommand(intent, flags, startId);
+
         initializeLocationManager();
         Log.e(TAG, "onCreate");
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             startMyOwnForeground();
+            subscribeToLocationUpdate();
+         }
         else
             startForeground(1, new Notification());
 
 
 
 
-        try {
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.PASSIVE_PROVIDER,
-                    LOCATION_INTERVAL,
-                    LOCATION_DISTANCE,
-                    mLocationListeners[0]
-            );
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
+
+        return START_STICKY;
+    }
+
+
+    public void serviceMessageStart () {
+
+        Intent alarmIntent = new Intent(gpsService.this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(gpsService.this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        if (pendingIntent != null) {
+            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() , 5 * 60 * 1000, pendingIntent);
         }
+    }
 
 
 
-        /*try {
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    LOCATION_INTERVAL,
-                    LOCATION_DISTANCE,
-                    mLocationListeners[1]
-            );
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "gps provider does not exist " + ex.getMessage());
-        }*/
+    @Override
+    public void onCreate() {
+
+        Log.e(TAG, "onCreate");
+        serviceMessageStart();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -174,28 +220,13 @@ public class gpsService extends Service {
         startForeground(2, notification);
     }
 
+
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy");
         super.onDestroy();
-        if (mLocationManager != null) {
-            for (int i = 0; i < mLocationListeners.length; i++) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    mLocationManager.removeUpdates(mLocationListeners[i]);
-                } catch (Exception ex) {
-                    Log.i(TAG, "fail to remove location listener, ignore", ex);
-                }
-            }
-        }
+        unsubscribeToLocationUpdate();
     }
 
-    private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager - LOCATION_INTERVAL: "+ LOCATION_INTERVAL + " LOCATION_DISTANCE: " + LOCATION_DISTANCE);
-        if (mLocationManager == null) {
-            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        }
-    }
+
 }

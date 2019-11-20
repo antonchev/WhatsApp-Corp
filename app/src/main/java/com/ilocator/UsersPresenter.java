@@ -191,6 +191,10 @@ public class UsersPresenter {
 
     }
 
+
+
+
+
     public void setAnchor(UserLocationView userLocationView){
         userLocationLayer.setAnchor(
 
