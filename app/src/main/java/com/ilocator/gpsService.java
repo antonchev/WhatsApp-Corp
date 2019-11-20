@@ -63,12 +63,7 @@ public class gpsService extends Service {
     private static final long MINIMAL_TIME = 0;
     private static final double MINIMAL_DISTANCE = 50;
     private static final boolean USE_IN_BACKGROUND = false;
-    /*
-    LocationListener[] mLocationListeners = new LocationListener[]{
-            new LocationListener(LocationManager.GPS_PROVIDER),
-            new LocationListener(LocationManager.NETWORK_PROVIDER)
-    };
-    */
+    int ALARM_TYPE = AlarmManager.RTC_WAKEUP;
 
 
 
@@ -185,7 +180,10 @@ public class gpsService extends Service {
 
         if (pendingIntent != null) {
             AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() , 5 * 60 * 1000, pendingIntent);
+          //  manager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(1*60*1000) , pendingIntent);
+          //  manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis()+2000 , pendingIntent);
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +3000, 5*60*1000, pendingIntent);
+
         }
     }
 

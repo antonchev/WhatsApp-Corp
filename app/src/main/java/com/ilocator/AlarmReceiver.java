@@ -14,9 +14,8 @@ public class AlarmReceiver extends BroadcastReceiver {
  public void onReceive(Context context, Intent intent) {
 
 
-  Intent intent_service = new Intent(context, gpsService.class);
 
-context.startForegroundService(intent_service);
+  context.startService(new Intent(context.getApplicationContext(), gpsService.class));
   // Выполняем свои действия
  }
 }
