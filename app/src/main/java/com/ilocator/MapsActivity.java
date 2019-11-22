@@ -27,7 +27,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
     private UsersPresenter presenter;
     public MapView mapView;
-    public final String MAPKIT_API_KEY = "065d417d-f54b-479d-aee2-f7aba805f889";
+    public final String MAPKIT_API_KEY = "62962b55-2d8b-4014-afec-85c06925b904";
 
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
