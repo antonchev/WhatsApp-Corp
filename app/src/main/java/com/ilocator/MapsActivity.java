@@ -2,6 +2,7 @@ package com.ilocator;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -93,7 +94,8 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
         if (user != null) {
             //    startForegroundService(intent);
-            WorkManager.getInstance(this).enqueue(gps);
+           // WorkManager.getInstance(this).enqueue(gps);
+            WorkManager.getInstance(this).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
             Log.d("START", "WORK START");
         }
 

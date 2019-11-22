@@ -97,11 +97,11 @@ public class workerClass extends Worker {
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-
+                super.onLocationResult(locationResult);
                 writeLocation(mLocation);
                 Log.d(TAG, "CALL BACK!!!");
 
-                super.onLocationResult(locationResult);
+
 
 
             }
