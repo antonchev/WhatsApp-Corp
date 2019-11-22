@@ -34,14 +34,14 @@ public class workerClass extends Worker {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 600000;
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
      * than this value.
      */
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+            UPDATE_INTERVAL_IN_MILLISECONDS / 300000;
     /**
      * The current location.
      */
@@ -97,9 +97,12 @@ public class workerClass extends Worker {
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
+
                 writeLocation(mLocation);
                 Log.d(TAG, "CALL BACK!!!");
+
+                super.onLocationResult(locationResult);
+
 
             }
         };
@@ -119,7 +122,7 @@ public class workerClass extends Worker {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 mLocation = task.getResult();
                                 Log.d(TAG, "Location : " + mLocation);
-
+                                writeLocation(mLocation);
                                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
                             } else {
                                 Log.w(TAG, "Failed to get location.");

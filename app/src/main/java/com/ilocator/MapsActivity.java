@@ -88,12 +88,14 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
                 new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
                                              .build();
 
-        WorkManager.getInstance(this).enqueue(gps);
-        Log.d("START", "WORK START");
 
-        if (user != null)
-        //    startForegroundService(intent);
 
+
+        if (user != null) {
+            //    startForegroundService(intent);
+            WorkManager.getInstance(this).enqueue(gps);
+            Log.d("START", "WORK START");
+        }
 
         super.onStop();
 
