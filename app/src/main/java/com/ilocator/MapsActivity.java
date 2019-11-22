@@ -2,13 +2,15 @@ package com.ilocator;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yandex.mapkit.MapKitFactory;
@@ -17,6 +19,8 @@ import com.yandex.mapkit.mapview.MapView;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class MapsActivity extends AppCompatActivity implements UserLocationObjectListener {
 
@@ -24,7 +28,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
     public MapView mapView;
     public final String MAPKIT_API_KEY = "065d417d-f54b-479d-aee2-f7aba805f889";
 
-    private UsersModel usersModel;
+
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
@@ -63,6 +67,9 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
     }
 
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStop() {
@@ -70,14 +77,24 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         MapKitFactory.getInstance().onStop();
         presenter.unsubscribeToLocationUpdate();
 
-        Intent intent = new Intent(this, gpsService.class);
+
+    //    Intent intent = new Intent(this, gpsService.class);
      //   startService(intent);
 
+       // OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
+
+        PeriodicWorkRequest gps =
+                new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
+                                             .build();
+
+        WorkManager.getInstance(this).enqueue(gps);
 
         if (user != null)
-            startForegroundService(intent);
+        //    startForegroundService(intent);
+
 
         super.onStop();
+
 
     }
 
@@ -92,10 +109,6 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         mapView.onStart();
         presenter.checkUser();
         presenter.subscribeToLocationUpdate();
-
-
-
-
     }
 
     @Override
