@@ -61,6 +61,7 @@ public class workerClass extends Worker {
     public workerClass(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         mContext = context;
+        Log.d(TAG, "CONSTRUCTION!!!");
     }
 
 
@@ -91,10 +92,15 @@ public class workerClass extends Worker {
         Log.d(TAG, "doWork: Done");
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+
+
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
+                writeLocation(mLocation);
+                Log.d(TAG, "CALL BACK!!!");
+
             }
         };
 
@@ -109,10 +115,11 @@ public class workerClass extends Worker {
                     .addOnCompleteListener(new OnCompleteListener<Location>() {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
+                            Log.d(TAG, "ON COMPLETE!!!");
                             if (task.isSuccessful() && task.getResult() != null) {
                                 mLocation = task.getResult();
                                 Log.d(TAG, "Location : " + mLocation);
-                                writeLocation(mLocation);
+
                                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
                             } else {
                                 Log.w(TAG, "Failed to get location.");

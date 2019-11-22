@@ -9,6 +9,7 @@ import androidx.work.WorkManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,6 +89,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
                                              .build();
 
         WorkManager.getInstance(this).enqueue(gps);
+        Log.d("START", "WORK START");
 
         if (user != null)
         //    startForegroundService(intent);
