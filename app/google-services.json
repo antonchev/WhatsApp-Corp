@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "414292098355-ohno3vncsrnhjp2u04mc5dg0rnsj4bv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ilocator",
+            "certificate_hash": "a056ab7115ca8693bf9af10e4f6cd6786a42b5bc"
+          }
+        },
+        {
           "client_id": "414292098355-td8af0uscd1qcd78gvld8ft2uhajg2tf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

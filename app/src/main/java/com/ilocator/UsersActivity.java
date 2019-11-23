@@ -27,26 +27,21 @@ public class UsersActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.users_activity);
         checkPermission();
         init();
-
     }
 
     private void checkPermission() {
         int permACL = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         int permAFL = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
         if (permACL != PackageManager.PERMISSION_GRANTED ||
                 permAFL != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_CODE);
         }
-
     }
 
     @Override
@@ -79,9 +74,6 @@ public class UsersActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
             }
         });
-
-
-
     }
 
     public void ChangeActivity (){
@@ -94,18 +86,6 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-
-     //   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    //    if (user != null) {
-     //     showToast(user.getDisplayName());
-
-
-   //     Intent intent = new Intent(this, MapsActivity.class);
-   //     startActivity(intent);
-   //     }
-
     }
 
     @Override

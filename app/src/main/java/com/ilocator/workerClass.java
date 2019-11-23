@@ -64,25 +64,16 @@ public class workerClass extends Worker {
         Log.d(TAG, "CONSTRUCTION!!!");
     }
 
-
     public void writeLocation(Location mLocation) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId =  user.getUid();
         String point = (mLocation.getLatitude()+"+"+ mLocation.getLongitude());
-
-
         SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
-
-
-
         HashMap<String, Object> value = new HashMap<>();
         value.put("point", point);
         value.put("timestamp", ServerValue.TIMESTAMP);
         value.put("date",   sfd.format(new Date(System.currentTimeMillis())));
-
-
         mDatabase.child("users").child(userId).child(("location")).push().setValue(value);
     }
 
@@ -90,20 +81,13 @@ public class workerClass extends Worker {
     @Override
     public Result doWork() {
         Log.d(TAG, "doWork: Done");
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-
-
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                writeLocation(mLocation);
+              //+  writeLocation(mLocation);
                 Log.d(TAG, "CALL BACK!!!");
-
-
-
-
             }
         };
 
@@ -118,12 +102,12 @@ public class workerClass extends Worker {
                     .addOnCompleteListener(new OnCompleteListener<Location>() {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
-                            Log.d(TAG, "ON COMPLETE!!!");
                             if (task.isSuccessful() && task.getResult() != null) {
                                 mLocation = task.getResult();
                                 Log.d(TAG, "Location : " + mLocation);
                                 writeLocation(mLocation);
                                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                                Log.d(TAG, "ON COMPLETE!!!");
                             } else {
                                 Log.w(TAG, "Failed to get location.");
                             }
@@ -144,7 +128,6 @@ public class workerClass extends Worker {
     ParseException ignored) {
 
     }
-
         return Result.success();
 }
 }
