@@ -2,17 +2,24 @@ package com.ilocator;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yandex.mapkit.MapKitFactory;
@@ -32,6 +39,9 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    LocationRequest mLocationRequest;
+    FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +113,13 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
 
 
     }
+
+
+
+
+
+
+
 
     public void showToast(String resId) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();

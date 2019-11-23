@@ -1,12 +1,16 @@
 package com.ilocator;
+import android.Manifest;
 import android.content.Context;
 
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ParseException;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -22,6 +26,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+
+
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,6 +70,9 @@ public class workerClass extends Worker {
      */
     private LocationCallback mLocationCallback;
 
+
+    LocationRequest mLocationRequest;
+
     public workerClass(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         mContext = context;
@@ -84,6 +99,18 @@ public class workerClass extends Worker {
 
 
         mDatabase.child("users").child(userId).child(("location")).push().setValue(value);
+    }
+
+    public void requestLocationUpdates(Context context) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(120000); // two minute interval
+        mLocationRequest.setFastestInterval(120000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        }
     }
 
     @NonNull
@@ -120,10 +147,12 @@ public class workerClass extends Worker {
                         public void onComplete(@NonNull Task<Location> task) {
                             Log.d(TAG, "ON COMPLETE!!!");
                             if (task.isSuccessful() && task.getResult() != null) {
-                                mLocation = task.getResult();
-                                Log.d(TAG, "Location : " + mLocation);
-                                writeLocation(mLocation);
-                                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                                {
+                                    mLocation = task.getResult();
+                                    Log.d(TAG, "Location : " + mLocation);
+
+                                    requestLocationUpdates(mContext);
+                                }
                             } else {
                                 Log.w(TAG, "Failed to get location.");
                             }
