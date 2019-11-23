@@ -38,18 +38,14 @@
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
+            android:layout_width="141dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="120dp" />
+            android:layout_marginTop="120dp"
+            android:text="Войти" />
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="180dp"
-            android:text="Выход" />
+
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
