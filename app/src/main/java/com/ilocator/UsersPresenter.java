@@ -212,9 +212,9 @@ public class UsersPresenter {
                 new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
                         .build();
         if (user != null) {
-            // WorkManager.getInstance(this).enqueue(gps);
+             WorkManager.getInstance(view_map).enqueue(gps);
             // OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
-            WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
+          //  WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
             Log.d("START", "WORK START");
         }
     }

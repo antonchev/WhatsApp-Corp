@@ -2,6 +2,8 @@ package com.ilocator;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -52,7 +54,12 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         mapView.onStop();
         MapKitFactory.getInstance().onStop();
         presenter.unsubscribeToLocationUpdate();
-        presenter.startWorker();
+       // presenter.startWorker();
+
+        Intent intent_service = new Intent(this, gpsService.class);
+        startForegroundService(intent_service);
+
+
         super.onStop();
     }
 
