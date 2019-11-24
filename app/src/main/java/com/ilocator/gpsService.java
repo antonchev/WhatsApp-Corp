@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -106,12 +107,13 @@ public class gpsService extends Service {
             final UsersModel usersModel = new UsersModel();
             presenter = new UsersPresenter(usersModel,view_map);
             presenter.attachViewMaps(view_map);
-         //   PeriodicWorkRequest gps =
-         //           new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
-            //                .build();
+            PeriodicWorkRequest gps =
+                   new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
+                            .build();
             if (user != null) {
-                OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
-                WorkManager.getInstance(view_map).enqueue(gps);
+               //OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
+                WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE,gps);
+               // WorkManager.getInstance(view_map).enqueue(gps);
                 stopSelf();
                 //  WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
                 Log.d("START", "WORK START");
@@ -131,13 +133,13 @@ public class gpsService extends Service {
 
 
 
-        if (pendingIntent != null) {
-            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        //if (pendingIntent != null) {
+          //  AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             //  manager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(1*60*1000) , pendingIntent);
             //  manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis()+2000 , pendingIntent);
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 15*60*1000, pendingIntent);
+           // manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 15*60*1000, pendingIntent);
 
-        }
+        //}
         Intent alarmIntent = new Intent(gpsService.this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(gpsService.this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 

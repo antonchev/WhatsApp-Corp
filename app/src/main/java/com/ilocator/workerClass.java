@@ -1,6 +1,7 @@
 package com.ilocator;
 import android.content.Context;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ParseException;
@@ -90,6 +91,8 @@ public class workerClass extends Worker {
                 Log.d(TAG, "CALL BACK!!!");
             }
         };
+        Intent intent_service = new Intent(mContext, gpsService.class);
+        mContext.startService(intent_service);
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -107,6 +110,7 @@ public class workerClass extends Worker {
                                 Log.d(TAG, "Location : " + mLocation);
                                 writeLocation(mLocation);
                                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+
                                 Log.d(TAG, "ON COMPLETE!!!");
                             } else {
                                 Log.w(TAG, "Failed to get location.");
