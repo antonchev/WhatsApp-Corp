@@ -1,13 +1,20 @@
 package com.ilocator;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.layers.ObjectEvent;
 import com.yandex.mapkit.mapview.MapView;
@@ -57,7 +64,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
        // presenter.startWorker();
 
         Intent intent_service = new Intent(this, gpsService.class);
-        startForegroundService(intent_service);
+       // startForegroundService(intent_service);
 
 
         super.onStop();
@@ -74,6 +81,29 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         mapView.onStart();
         presenter.checkUser();
         presenter.subscribeToLocationUpdate();
+
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FIREBASE", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("MESSAGE", msg);
+                        Toast.makeText(MapsActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
     }
 
     @Override

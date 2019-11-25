@@ -91,8 +91,6 @@ public class workerClass extends Worker {
                 Log.d(TAG, "CALL BACK!!!");
             }
         };
-        Intent intent_service = new Intent(mContext, gpsService.class);
-        mContext.startService(intent_service);
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);

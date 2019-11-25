@@ -99,7 +99,7 @@ public class gpsService extends Service {
 
         Log.e(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
-        serviceMessageStart();
+     //   serviceMessageStart();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             startMyOwnForeground();
            // presenter.startWorker();
@@ -107,14 +107,18 @@ public class gpsService extends Service {
             final UsersModel usersModel = new UsersModel();
             presenter = new UsersPresenter(usersModel,view_map);
             presenter.attachViewMaps(view_map);
-            PeriodicWorkRequest gps =
-                   new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
-                            .build();
+         //   PeriodicWorkRequest gps =
+               //    new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
+               //             .build();
+            OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
             if (user != null) {
-               //OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
-                WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE,gps);
-               // WorkManager.getInstance(view_map).enqueue(gps);
-                stopSelf();
+
+             //   WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE,gps);
+               WorkManager.getInstance(view_map).enqueue(gps);
+               if ( workerClass.Result.success() != null) {
+                   stopSelf();
+               }
+
                 //  WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
                 Log.d("START", "WORK START");
             }
@@ -133,15 +137,15 @@ public class gpsService extends Service {
 
 
 
-        //if (pendingIntent != null) {
-          //  AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            //  manager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(1*60*1000) , pendingIntent);
+        if (pendingIntent != null) {
+            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+              manager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(15*60*1000) , pendingIntent);
             //  manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis()+2000 , pendingIntent);
-           // manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 15*60*1000, pendingIntent);
+          //  manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 17*60*1000, pendingIntent);
 
-        //}
-        Intent alarmIntent = new Intent(gpsService.this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(gpsService.this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        }
+     //   Intent alarmIntent = new Intent(gpsService.this, AlarmReceiver.class);
+       // pendingIntent = PendingIntent.getBroadcast(gpsService.this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
     }
 

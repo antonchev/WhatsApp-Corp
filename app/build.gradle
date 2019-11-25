@@ -79,5 +79,6 @@ dependencies {
 
     // optional - Test helpers
     androidTestImplementation "androidx.work:work-testing:$work_version"
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
 }
 
