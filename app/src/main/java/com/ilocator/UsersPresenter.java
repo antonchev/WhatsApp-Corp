@@ -107,12 +107,10 @@ public class UsersPresenter {
     }
 
     public void writeNewUser() {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userId =  user.getUid();
-        UsersModel model = new UsersModel();
+
+
       //  String point = (myLocation.getLatitude()+"+"+ myLocation.getLongitude());
-        mDatabase.child("users").child(userId).setValue(model);
+        model.addNewUser();
        // mDatabase.child("users").child(userId).child(("location")).push().setValue(point);
     }
 
