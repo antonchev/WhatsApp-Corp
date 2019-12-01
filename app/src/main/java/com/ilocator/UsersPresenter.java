@@ -92,6 +92,7 @@ public class UsersPresenter {
         // [END initialize_auth]
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
        view.startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     public void checkUser (){

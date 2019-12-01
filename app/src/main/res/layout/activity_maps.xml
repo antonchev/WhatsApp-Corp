@@ -28,11 +28,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="70dp"
+            android:layout_marginLeft="20dp"
+
             app:backgroundTint="#512DA8"
 
 
             app:srcCompat="@drawable/ic_gps_fi_white" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#FFF"
+            app:itemIconTint="#512DA8"
+            app:itemTextColor="#512DA8"
+            app:menu="@menu/main"
+            app:labelVisibilityMode="selected"/>
+
+
+        </LinearLayout>
+
 
     </FrameLayout>
 

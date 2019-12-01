@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -115,9 +116,15 @@ public class gpsService extends Service {
 
              //   WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE,gps);
                WorkManager.getInstance(view_map).enqueue(gps);
-               if ( workerClass.Result.success() != null) {
-                   stopSelf();
-               }
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        service();
+                    }
+                }, 5000);   //5 seconds
+
+
 
                 //  WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
                 Log.d("START", "WORK START");
@@ -131,7 +138,11 @@ public class gpsService extends Service {
         return START_STICKY;
     }
 
-
+    private  void service () {
+        if ( workerClass.Result.success() != null) {
+            stopSelf();
+        }
+    }
     public void serviceMessageStart () {
 
 
@@ -173,7 +184,7 @@ public class gpsService extends Service {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         Notification notification = notificationBuilder.setOngoing(true)
                 .setSmallIcon(R.drawable.ic_logo)
-                .setContentTitle("iLocator GPS")
+                .setContentTitle("Определение местоположения...")
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
