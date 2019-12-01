@@ -1,4 +1,4 @@
-package com.ilocator;
+package com.ilocator.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -15,6 +15,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.ilocator.R;
+import com.ilocator.UsersModel;
+import com.ilocator.UsersPresenter;
+import com.ilocator.services.gpsService;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.layers.ObjectEvent;
 import com.yandex.mapkit.mapview.MapView;
@@ -22,7 +26,7 @@ import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
 
 
-public class MapsActivity extends AppCompatActivity implements UserLocationObjectListener {
+public class MainActivity extends AppCompatActivity implements UserLocationObjectListener {
 
     private UsersPresenter presenter;
     public MapView mapView;
@@ -35,7 +39,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         super.onCreate(savedInstanceState);
         MapKitFactory.setApiKey(MAPKIT_API_KEY);
         MapKitFactory.initialize(this);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_main);
         init();
 
         }
@@ -45,7 +49,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
         // ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         final UsersModel usersModel = new UsersModel();
         presenter = new UsersPresenter(usersModel,this);
-        presenter.attachViewMaps(this);
+        presenter.attachViewMain(this);
         findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +57,9 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
             }
         });
         presenter.onMapReady();
+
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -98,7 +105,7 @@ public class MapsActivity extends AppCompatActivity implements UserLocationObjec
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d("MESSAGE", msg);
-                        Toast.makeText(MapsActivity.this, msg, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
 

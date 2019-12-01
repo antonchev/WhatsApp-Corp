@@ -1,4 +1,4 @@
-package com.ilocator;
+package com.ilocator.services;
 import android.content.Context;
 
 import android.content.Intent;

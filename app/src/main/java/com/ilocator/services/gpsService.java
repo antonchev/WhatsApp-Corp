@@ -1,4 +1,4 @@
-package com.ilocator;
+package com.ilocator.services;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -6,48 +6,31 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.os.Bundle;
 
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-import com.yandex.mapkit.Animation;
-import com.yandex.mapkit.MapKitFactory;
+import com.ilocator.R;
+import com.ilocator.UsersModel;
+import com.ilocator.UsersPresenter;
+import com.ilocator.activity.MainActivity;
 import com.yandex.mapkit.geometry.Point;
-import com.yandex.mapkit.location.FilteringMode;
-import com.yandex.mapkit.location.Location;
 import com.yandex.mapkit.location.LocationListener;
-import com.yandex.mapkit.location.LocationStatus;
-import com.yandex.mapkit.map.CameraPosition;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import static java.text.DateFormat.getDateTimeInstance;
 
@@ -73,7 +56,7 @@ public class gpsService extends Service {
 
     public UsersPresenter presenter;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private MapsActivity view_map;
+    private MainActivity viewMain;
 
 
     @Override
@@ -106,16 +89,16 @@ public class gpsService extends Service {
            // presenter.startWorker();
           //
             final UsersModel usersModel = new UsersModel();
-            presenter = new UsersPresenter(usersModel,view_map);
-            presenter.attachViewMaps(view_map);
+            presenter = new UsersPresenter(usersModel, viewMain);
+            presenter.attachViewMain(viewMain);
          //   PeriodicWorkRequest gps =
                //    new PeriodicWorkRequest.Builder(workerClass.class, 15, TimeUnit.MINUTES )
                //             .build();
             OneTimeWorkRequest gps = new OneTimeWorkRequest.Builder(workerClass.class).build();
             if (user != null) {
 
-             //   WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE,gps);
-               WorkManager.getInstance(view_map).enqueue(gps);
+             //   WorkManager.getInstance(viewMain).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE,gps);
+               WorkManager.getInstance(viewMain).enqueue(gps);
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -126,7 +109,7 @@ public class gpsService extends Service {
 
 
 
-                //  WorkManager.getInstance(view_map).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
+                //  WorkManager.getInstance(viewMain).enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, gps);
                 Log.d("START", "WORK START");
             }
 

@@ -86,5 +86,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:+'
 
 
-    
+}
+
+dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:+'
 }

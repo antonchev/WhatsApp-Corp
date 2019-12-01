@@ -1,4 +1,4 @@
-package com.ilocator;
+package com.ilocator.activity;
 
 
 import android.Manifest;
@@ -16,6 +16,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.ilocator.R;
+import com.ilocator.UsersModel;
+import com.ilocator.UsersPresenter;
 
 import java.util.List;
 
@@ -100,7 +103,7 @@ public class UsersActivity extends AppCompatActivity {
     }
 
     public void ChangeActivity (){
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish(); // call this to finish the current activity

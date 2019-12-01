@@ -36,7 +36,7 @@ public class UsersPresenter {
 
     private static int RC_SIGN_IN = 100;
     private UsersActivity view;
-    private MapsActivity view_map;
+    private MainActivity view_map;
     private final UsersModel model;
     public Activity activity;
     private FirebaseAuth mAuth;
@@ -65,9 +65,8 @@ public class UsersPresenter {
 
     }
 
-    public void attachViewMaps(MapsActivity mapsActivity) {
-        view_map = mapsActivity;
-
+    public void attachViewMain(MainActivity mainActivity) {
+        view_map = mainActivity;
     }
 
     public void auth(Context context) {
