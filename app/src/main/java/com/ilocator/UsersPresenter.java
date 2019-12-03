@@ -36,7 +36,8 @@ public class UsersPresenter {
 
     private static int RC_SIGN_IN = 100;
     private UsersActivity view;
-    private MainActivity view_map;
+    private MainActivity view_main;
+    private MapsFragment view_map_fragment;
     private final UsersModel model;
     public Activity activity;
     private FirebaseAuth mAuth;
@@ -66,8 +67,13 @@ public class UsersPresenter {
     }
 
     public void attachViewMain(MainActivity mainActivity) {
-        view_map = mainActivity;
+        view_main = mainActivity;
     }
+
+    public void attachViewMapFragment(MapsFragment mapsFragment) {
+        view_map_fragment = mapsFragment;
+    }
+
 
     public void auth(Context context) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -87,10 +93,10 @@ public class UsersPresenter {
     public void checkUser (){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            Intent intent = new Intent(view_map, UsersActivity.class);
+            Intent intent = new Intent(view_main, UsersActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            view_map.startActivity(intent);
-            view_map.finish(); // call this to finish the current activity
+            view_main.startActivity(intent);
+            view_main.finish(); // call this to finish the current activity
         }
         else {    view_map.showToast(user.getDisplayName()); }
 
@@ -177,7 +183,7 @@ public class UsersPresenter {
 
     public void cameraUserPosition(){
 
-        view_map.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
+        view_main.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
         if(userLocationLayer.cameraPosition() != null){
             routeStartLocation = userLocationLayer.cameraPosition().getTarget();
             mapView.getMap().move(new CameraPosition(routeStartLocation,COMFORTABLE_ZOOM_LEVEL,0,0), new Animation(Animation.Type.SMOOTH,2),null);

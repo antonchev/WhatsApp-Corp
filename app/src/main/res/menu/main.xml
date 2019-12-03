@@ -2,13 +2,16 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/navigation_map"
         android:icon="@drawable/ic_users_linked"
         android:title="Люди" />
     <item
+        android:id="@+id/navigation_groups"
         android:icon="@drawable/ic_plus"
         app:labelVisibilityMode="unlabeled"
         android:title="Группа" />
     <item
+        android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
         android:title="Настройки" />
 </menu>
