@@ -1,4 +1,4 @@
-package com.ilocator.activity;
+package com.ilocator.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,11 +19,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.ilocator.utils.CustomViewPager;
 import com.ilocator.R;
-import com.ilocator.UsersModel;
-import com.ilocator.UsersPresenter;
+import com.ilocator.models.UsersModel;
+import com.ilocator.presenters.UsersPresenter;
+import com.ilocator.utils.ViewPagerAdapter;
 import com.ilocator.fragmnets.GroupsFragment;
 import com.ilocator.fragmnets.MapsFragment;
+import com.ilocator.fragmnets.SettingsFragment;
 import com.ilocator.services.gpsService;
 import com.yandex.mapkit.layers.ObjectEvent;
 import com.yandex.mapkit.mapview.MapView;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
     public final String MAPKIT_API_KEY = "62962b55-2d8b-4014-afec-85c06925b904";
     BottomNavigationView bottomNavigation;
     NavController navController;
+    CustomViewPager viewPager;
+    ViewPagerAdapter adapter = new ViewPagerAdapter(MainActivity.this.getSupportFragmentManager());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,6 +55,19 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
 
 
         }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if (viewPager.getCurrentItem() == 1) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1,false);
+        }else if (viewPager.getCurrentItem() == 2) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 2,false);
+        }else finish();
+
+
+    }
 
     private void init() {
       //  mapView = findViewById(R.id.mapview);
@@ -68,7 +84,17 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
       //  presenter.onMapReady();
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
-        navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
+        viewPager = findViewById(R.id.viewpager1);
+
+
+
+
+
+        adapter.addFragment(new MapsFragment(), "Maps");
+        adapter.addFragment(new GroupsFragment(), "Groups");
+        adapter.addFragment(new SettingsFragment(), "Settings");
+viewPager.setOffscreenPageLimit(3);
+        viewPager.setAdapter(adapter);
 
 
         BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -80,14 +106,15 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
                         switch (item.getItemId()) {
                             case R.id.navigation_map:
 
-                                navController.navigate(R.id.mapsFragment);
+                                viewPager.setCurrentItem(0);
+
                                 return true;
                             case R.id.navigation_groups:
 
-                            navController.navigate(R.id.groupsFragment);
-
-
-
+                                viewPager.setCurrentItem(1);
+                                return true;
+                            case R.id.navigation_settings:
+                                viewPager.setCurrentItem(2);
                                 return true;
                         }
                         return false;
@@ -100,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
 
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }
+
+
 
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

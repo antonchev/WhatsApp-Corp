@@ -13,8 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.ilocator.R;
-import com.ilocator.UsersModel;
-import com.ilocator.UsersPresenter;
+import com.ilocator.presenters.UsersPresenter;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKit;
 import com.yandex.mapkit.MapKitFactory;

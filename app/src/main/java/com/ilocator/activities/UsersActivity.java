@@ -1,4 +1,4 @@
-package com.ilocator.activity;
+package com.ilocator.activities;
 
 
 import android.Manifest;
@@ -17,8 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.ilocator.R;
-import com.ilocator.UsersModel;
-import com.ilocator.UsersPresenter;
+import com.ilocator.models.UsersModel;
+import com.ilocator.presenters.UsersPresenter;
 
 import java.util.List;
 

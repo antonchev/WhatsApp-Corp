@@ -1,4 +1,4 @@
-package com.ilocator;
+package com.ilocator.models;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

@@ -32,7 +32,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ilocator.R;
-import com.ilocator.activity.MainActivity;
+import com.ilocator.activities.MainActivity;
 
 
 import androidx.work.OneTimeWorkRequest;

@@ -26,9 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.ilocator.R;
-import com.ilocator.UsersModel;
-import com.ilocator.UsersPresenter;
-import com.ilocator.activity.MainActivity;
+import com.ilocator.models.UsersModel;
+import com.ilocator.presenters.UsersPresenter;
+import com.ilocator.activities.MainActivity;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.location.LocationListener;
 

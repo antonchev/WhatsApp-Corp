@@ -1,4 +1,4 @@
-package com.ilocator;
+package com.ilocator.presenters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,9 +23,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.ilocator.activity.MainActivity;
-import com.ilocator.activity.UsersActivity;
+import com.ilocator.R;
+import com.ilocator.activities.MainActivity;
+import com.ilocator.activities.UsersActivity;
 import com.ilocator.fragmnets.MapsFragment;
+import com.ilocator.models.UsersModel;
 import com.ilocator.services.workerClass;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKit;

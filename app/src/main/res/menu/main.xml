@@ -7,7 +7,7 @@
         android:title="Люди" />
     <item
         android:id="@+id/navigation_groups"
-        android:icon="@drawable/ic_plus"
+        android:icon="@drawable/ic_family_room"
         app:labelVisibilityMode="unlabeled"
         android:title="Группа" />
     <item
