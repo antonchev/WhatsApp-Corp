@@ -82,9 +82,6 @@ public class UsersPresenter {
         view_main = mainActivity;
     }
 
-    public void attachViewMapFragment(MapsFragment mapsFragment) {
-        view_map_fragment = mapsFragment;
-    }
 
 
     public void auth(Context context) {
@@ -105,7 +102,6 @@ public class UsersPresenter {
     }
 
 
-
     public void checkUser (){
         if (user == null) {
             Intent intent = new Intent(view_main, UsersActivity.class);
@@ -118,7 +114,6 @@ public class UsersPresenter {
     }
 
     public void writeNewUser() {
-
 
       //  String point = (myLocation.getLatitude()+"+"+ myLocation.getLongitude());
         model.addNewUser();

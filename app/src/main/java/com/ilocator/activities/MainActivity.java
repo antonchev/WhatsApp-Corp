@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
+
 
 import android.content.Intent;
 import android.os.Build;
@@ -28,15 +28,12 @@ import com.ilocator.fragmnets.GroupsFragment;
 import com.ilocator.fragmnets.MapsFragment;
 import com.ilocator.fragmnets.SettingsFragment;
 import com.ilocator.services.gpsService;
-import com.yandex.mapkit.Animation;
-import com.yandex.mapkit.layers.ObjectEvent;
-import com.yandex.mapkit.map.CameraPosition;
+
 import com.yandex.mapkit.mapview.MapView;
-import com.yandex.mapkit.user_location.UserLocationObjectListener;
-import com.yandex.mapkit.user_location.UserLocationView;
 
 
-public class MainActivity extends AppCompatActivity implements UserLocationObjectListener {
+
+public class MainActivity extends AppCompatActivity{
 
     private UsersPresenter presenter;
     BottomNavigationView bottomNavigation;
@@ -79,9 +76,6 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
      presenter.cameraUserPosition(mapView);
     }
 
-    public void checkuser (){
-        presenter.checkUser();
-    }
 
     public void subscribeToLocationUpdate() {
         presenter.subscribeToLocationUpdate();
@@ -212,16 +206,7 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
 
     }
 
-    @Override
-    public void onObjectAdded(UserLocationView userLocationView) {
-      presenter.setAnchor(userLocationView);
-       // userLocationView.getArrow().setIcon(ImageProvider.fromResource(
-       //       this, R.drawable.user_arrow));
-    }
-    public void onObjectRemoved(UserLocationView view) {}
-    public void onObjectUpdated(UserLocationView view, ObjectEvent event) {
 
-    }
 
 }
 
