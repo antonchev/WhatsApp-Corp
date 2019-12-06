@@ -5,7 +5,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +24,7 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.ilocator.R;
 import com.ilocator.UsersModel;
 import com.ilocator.UsersPresenter;
+import com.ilocator.fragmnets.GroupsFragment;
 import com.ilocator.fragmnets.MapsFragment;
 import com.ilocator.services.gpsService;
 import com.yandex.mapkit.layers.ObjectEvent;
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
     public MapView mapView;
     public final String MAPKIT_API_KEY = "62962b55-2d8b-4014-afec-85c06925b904";
     BottomNavigationView bottomNavigation;
-
+    NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
     //    MapKitFactory.initialize(this);
         setContentView(R.layout.activity_main);
         init();
+
+
 
         }
 
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
       //  presenter.onMapReady();
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
-
+        navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
 
         BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -73,9 +79,16 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.navigation_map:
-                                openFragment(MapsFragment.newInstance("", ""));
-                                return true;
 
+                                navController.navigate(R.id.mapsFragment);
+                                return true;
+                            case R.id.navigation_groups:
+
+                            navController.navigate(R.id.groupsFragment);
+
+
+
+                                return true;
                         }
                         return false;
                     }
@@ -83,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
 
                 };
 
-        openFragment(MapsFragment.newInstance("",""));
+       // openFragment(MapsFragment.newInstance("",""));
 
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }
