@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.ilocator.R;
+import com.ilocator.activities.MainActivity;
 import com.ilocator.presenters.UsersPresenter;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKit;
@@ -138,7 +139,8 @@ public class MapsFragment extends Fragment  implements UserLocationObjectListene
         super.onStart();
             MapKitFactory.getInstance().onStart();
           mapView.onStart();
-       subscribeToLocationUpdate();
+        ((MainActivity)getActivity()).subscribeToLocationUpdate();
+
 
     }
 
@@ -186,13 +188,14 @@ public class MapsFragment extends Fragment  implements UserLocationObjectListene
 
       //  MapView mapView = FragmentMapView.findViewById(R.id.mapview);
 
+        ((MainActivity)getActivity()).onMapReady( mapView);
 
-        onMapReady(mapView);
 
          FragmentMapView.findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
             @Override
            public void onClick(View v) {
-         cameraUserPosition();// FirebaseAuth.getInstance().signOut();
+               // ((MainActivity)getActivity()).checkuser();
+                ((MainActivity)getActivity()).cameraUserPosition(mapView);// FirebaseAuth.getInstance().signOut();
               }
            });
 
@@ -203,18 +206,7 @@ public class MapsFragment extends Fragment  implements UserLocationObjectListene
 
     }
 
-    public void cameraUserPosition(){
 
-       showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
-        if(userLocationLayer.cameraPosition() != null){
-            routeStartLocation = userLocationLayer.cameraPosition().getTarget();
-            mapView.getMap().move(new CameraPosition(routeStartLocation,COMFORTABLE_ZOOM_LEVEL,0,0), new Animation(Animation.Type.SMOOTH,2),null);
-        } else
-        {
-            //  mapView.getMap().move(new CameraPosition(new Point(0, 0), 15, 0, 0));
-            //   mapView.getMap().move(new CameraPosition(routeStartLocation, 15, 0, 0));
-        }
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

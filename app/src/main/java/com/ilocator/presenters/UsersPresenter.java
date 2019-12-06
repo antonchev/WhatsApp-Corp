@@ -55,7 +55,7 @@ public class UsersPresenter {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "MainActivity";
-    private MapView mapView;
+   public MapView mapView;
     private UserLocationLayer userLocationLayer;
     private Point routeStartLocation = new Point(0.0, 0.0);
     public static final int COMFORTABLE_ZOOM_LEVEL = 18;
@@ -103,6 +103,8 @@ public class UsersPresenter {
        view.startActivityForResult(signInIntent, RC_SIGN_IN);
 
     }
+
+
 
     public void checkUser (){
         if (user == null) {
@@ -153,7 +155,7 @@ public class UsersPresenter {
                 });
     }
 
-    public  void onMapReady (){
+    public  void onMapReady (final MapView mapView ){
        // mapView = this.activity.findViewById(R.id.mapview);
         mapView.getMap().setRotateGesturesEnabled(true);
         MapKit mapKit = MapKitFactory.getInstance();
@@ -192,7 +194,7 @@ public class UsersPresenter {
         userLocationView.getAccuracyCircle().setFillColor(Color.BLUE);
     }
 
-    public void cameraUserPosition(){
+    public void cameraUserPosition(MapView mapView){
 
         view_main.showToast("Координаты "+myLocation.getLatitude()+" + "+myLocation.getLongitude());
         if(userLocationLayer.cameraPosition() != null){

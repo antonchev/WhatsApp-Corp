@@ -28,7 +28,9 @@ import com.ilocator.fragmnets.GroupsFragment;
 import com.ilocator.fragmnets.MapsFragment;
 import com.ilocator.fragmnets.SettingsFragment;
 import com.ilocator.services.gpsService;
+import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.layers.ObjectEvent;
+import com.yandex.mapkit.map.CameraPosition;
 import com.yandex.mapkit.mapview.MapView;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
@@ -37,12 +39,10 @@ import com.yandex.mapkit.user_location.UserLocationView;
 public class MainActivity extends AppCompatActivity implements UserLocationObjectListener {
 
     private UsersPresenter presenter;
-    public MapView mapView;
-    public final String MAPKIT_API_KEY = "62962b55-2d8b-4014-afec-85c06925b904";
     BottomNavigationView bottomNavigation;
-    NavController navController;
+
     CustomViewPager viewPager;
-    ViewPagerAdapter adapter = new ViewPagerAdapter(MainActivity.this.getSupportFragmentManager());
+    ViewPagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -69,6 +69,24 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
 
     }
 
+    public  void onMapReady (final MapView mapView ){
+
+        presenter.onMapReady(mapView);
+    }
+
+    public void cameraUserPosition(MapView mapView){
+
+     presenter.cameraUserPosition(mapView);
+    }
+
+    public void checkuser (){
+        presenter.checkUser();
+    }
+
+    public void subscribeToLocationUpdate() {
+        presenter.subscribeToLocationUpdate();
+    }
+
     private void init() {
       //  mapView = findViewById(R.id.mapview);
         // ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
@@ -89,11 +107,11 @@ public class MainActivity extends AppCompatActivity implements UserLocationObjec
 
 
 
-
+        adapter = new ViewPagerAdapter(MainActivity.this.getSupportFragmentManager());
         adapter.addFragment(new MapsFragment(), "Maps");
         adapter.addFragment(new GroupsFragment(), "Groups");
         adapter.addFragment(new SettingsFragment(), "Settings");
-viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(adapter);
 
 
