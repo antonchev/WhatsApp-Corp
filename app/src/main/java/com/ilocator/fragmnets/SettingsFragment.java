@@ -1,5 +1,6 @@
 package com.ilocator.fragmnets;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ilocator.R;
+import com.ilocator.utils.MyAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,8 +32,11 @@ public class SettingsFragment extends Fragment  {
     private String mParam1;
     private String mParam2;
 
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
-
+    String[] myDataset = {"Создать группу"};
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -95,10 +102,26 @@ public class SettingsFragment extends Fragment  {
 
 
 
-      //  MapView mapView = FragmentMapView.findViewById(R.id.mapview);
 
 
 
+
+
+
+        recyclerView =  FragmentSettingView.findViewById(R.id.recyclerview);
+
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+
+
+
+      //  MyAdapter.MyViewHolder my = new MyAdapter.MyViewHolder(FragmentSettingView);
+
+        mAdapter = new MyAdapter(getContext(),myDataset);
+        recyclerView.setAdapter(mAdapter);
 
 
 

@@ -24,7 +24,10 @@ public class CustomViewPager extends ViewPager {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        return false;//  return this.isPagingEnabled && super.onTouchEvent(event);
+        //
+        return false;
+        //
+     //   return this.isPagingEnabled && super.onTouchEvent(event);
     }
 
     //for samsung phones to prevent tab switching keys to show on keyboard
@@ -35,7 +38,8 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        return this.isPagingEnabled && super.onInterceptTouchEvent(event);
+       // return this.isPagingEnabled && super.onInterceptTouchEvent(event);
+        return false;
     }
 
     public void setPagingEnabled(boolean enabled) {
