@@ -29,6 +29,7 @@ import com.ilocator.activities.UsersActivity;
 import com.ilocator.fragmnets.MapsFragment;
 import com.ilocator.models.UsersModel;
 import com.ilocator.services.workerClass;
+import com.ilocator.utils.MyApplication;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKit;
 import com.yandex.mapkit.MapKitFactory;
@@ -103,20 +104,20 @@ public class UsersPresenter {
 
 
     public void checkUser (){
-        if (user == null) {
+        if (MyApplication.getInstance().getPrefManager().getUser()  == null) {
             Intent intent = new Intent(view_main, UsersActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             view_main.startActivity(intent);
             view_main.finish(); // call this to finish the current activity
         }
-        else {    view_main.showToast(user.getDisplayName());
+        else {    view_main.showToast(MyApplication.getInstance().getPrefManager().getUser().getName());
         }
     }
 
     public void writeNewUser() {
 
       //  String point = (myLocation.getLatitude()+"+"+ myLocation.getLongitude());
-        model.addNewUser();
+       // model.addNewUser();
        // mDatabase.child("users").child(userId).child(("location")).push().setValue(point);
     }
 

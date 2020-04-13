@@ -1,56 +1,56 @@
 package com.ilocator.models;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-public class UsersModel {
 
 
-    public String username ;
-    public String email ;
-    public String myLocation;
-    public String userId;
-    public DatabaseReference mDatabase;
 
+import java.io.Serializable;
 
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+/**
+ * Created by Lincoln on 07/01/16.
+ */
+public class UsersModel implements Serializable {
+    String id, name, email, token;
 
-
-    public UsersModel( ) {
-         //   this.myLocation = point;
-
-            this.username = getUsername();
-            this.email = getEmail();
-             this.userId = userId();
+    public UsersModel() {
     }
 
-    public String getUsername() {
-       if (user!=null)
-       { username = user.getDisplayName();
-       return username;}
-      return "";
+    public UsersModel(String id, String name, String email, String token) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.token = token;
     }
 
-    public String userId(){
-        if (user!=null)
-        {
-
-            String userId =  user.getUid();
-            return userId;
-        }
-        return "";
+    public String getToken() {
+        return token;
     }
 
-    public String getEmail(){
-        if (user!=null)
-        { username = user.getEmail();return username;}
-        return "";
+    public void setToken(String id) {
+        this.token = token;
     }
 
-    public void addNewUser () {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("users").child(userId).setValue(new UsersModel());
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
+

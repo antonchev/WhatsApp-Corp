@@ -3,6 +3,7 @@ package com.ilocator.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -58,28 +60,41 @@ public class MainActivity extends AppCompatActivity{
     public void onBackPressed() {
 
         if (viewPager.getCurrentItem() == 1) {
-            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1,false);
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1,false);
         }else if (viewPager.getCurrentItem() == 2) {
-            viewPager.setCurrentItem(viewPager.getCurrentItem() - 2,false);
+          //  viewPager.setCurrentItem(viewPager.getCurrentItem() ,false);
+            finish();
         }else finish();
 
 
     }
 
-    public  void onMapReady (final MapView mapView ){
 
-        presenter.onMapReady(mapView);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
     }
 
-    public void cameraUserPosition(MapView mapView){
-
-     presenter.cameraUserPosition(mapView);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_profile:
+                viewPager.setCurrentItem(1);
+                return true;
+           // case R.id.help:
+           //     showHelp();
+            //    return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 
-    public void subscribeToLocationUpdate() {
-        presenter.subscribeToLocationUpdate();
-    }
+
+
 
     private void init() {
       //  mapView = findViewById(R.id.mapview);
@@ -87,18 +102,14 @@ public class MainActivity extends AppCompatActivity{
         final UsersModel usersModel = new UsersModel();
         presenter = new UsersPresenter(usersModel, this);
         presenter.attachViewMain(this);
-        // findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //   public void onClick(View v) {
-        //   presenter.cameraUserPosition();// FirebaseAuth.getInstance().signOut();
-        //      }
-        //   });
-      //  presenter.onMapReady();
 
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+
+       // bottomNavigation = findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.viewpager1);
-
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        setSupportActionBar(toolbar);
 
 
         adapter = new ViewPagerAdapter(MainActivity.this.getSupportFragmentManager());
@@ -107,7 +118,7 @@ public class MainActivity extends AppCompatActivity{
         adapter.addFragment(new SettingsFragment(), "Settings");
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(adapter);
-
+        viewPager.setCurrentItem(2);
 
         BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -137,7 +148,7 @@ public class MainActivity extends AppCompatActivity{
 
        // openFragment(MapsFragment.newInstance("",""));
 
-        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+       // bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }
 
 
@@ -178,32 +189,31 @@ public class MainActivity extends AppCompatActivity{
       //  presenter.subscribeToLocationUpdate();
 
 
+
+
+
+    }
+
+    protected void Firebase (){
+
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
-                           Log.w("FIREBASE", "getInstanceId failed", task.getException());
+                            Log.w("FIREBASE", "getInstanceId failed", task.getException());
                             return;
-                       }
+                        }
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
 
                         // Log and toast
-                       String msg = getString(R.string.msg_token_fmt, token);
+                        String msg = getString(R.string.msg_token_fmt, token);
                         Log.d("MESSAGE", msg);
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-
-
-
-
-
     }
 
 

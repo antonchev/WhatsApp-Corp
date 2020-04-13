@@ -3,6 +3,7 @@ package com.ilocator.fragmnets;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ilocator.R;
 import com.ilocator.utils.MyAdapter;
+import com.ilocator.utils.MyApplication;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +38,7 @@ public class SettingsFragment extends Fragment  {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    String[] myDataset = {"Создать группу"};
+    String[] myDataset = {"Создать группу","Создать группу"};
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -97,6 +99,7 @@ public class SettingsFragment extends Fragment  {
                              Bundle savedInstanceState) {
       //  MapView mapView = (MapView) inflater.inflate(R.layout., null);
         // Inflate the layout for this fragment
+        Log.v("TOKEN",  MyApplication.getInstance().getPrefManager().getUser().getToken());
 
         View FragmentSettingView = inflater.inflate(R.layout.fragment_settings, container, false);
 

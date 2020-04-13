@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 
 import com.ilocator.R;
+import com.ilocator.utils.MyApplication;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,9 +94,15 @@ public class GroupsFragment extends Fragment  {
                              Bundle savedInstanceState) {
       //  MapView mapView = (MapView) inflater.inflate(R.layout., null);
         // Inflate the layout for this fragment
-
         View FragmentGroupView = inflater.inflate(R.layout.fragment_groups, container, false);
 
+
+
+        TextView name =  FragmentGroupView.findViewById(R.id.Name);
+        TextView email =  FragmentGroupView.findViewById(R.id.email);
+
+        name.setText(MyApplication.getInstance().getPrefManager().getUser().getName());
+        email.setText(MyApplication.getInstance().getPrefManager().getUser().getEmail());
 
 
       //  MapView mapView = FragmentMapView.findViewById(R.id.mapview);

@@ -19,7 +19,7 @@ import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
 
 
-public class MapsFragment extends Fragment  implements UserLocationObjectListener {
+public class MapsFragment extends Fragment  {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -58,28 +58,12 @@ public class MapsFragment extends Fragment  implements UserLocationObjectListene
     @Override
     public void onStart() {
         super.onStart();
-            MapKitFactory.getInstance().onStart();
-          mapView.onStart();
-        ((MainActivity)getActivity()).subscribeToLocationUpdate();
-    }
 
-    @Override
-    public void onObjectAdded(UserLocationView userLocationView) {
-        presenter.setAnchor(userLocationView);
-        // userLocationView.getArrow().setIcon(ImageProvider.fromResource(
-        //       this, R.drawable.user_arrow));
-    }
-    public void onObjectRemoved(UserLocationView view) {}
-    public void onObjectUpdated(UserLocationView view, ObjectEvent event) {
+
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-         mapView.onStop();
-           MapKitFactory.getInstance().onStop();
-    }
+
 
     @Override
     public void onResume() {
@@ -92,23 +76,22 @@ public class MapsFragment extends Fragment  implements UserLocationObjectListene
                              Bundle savedInstanceState) {
       //  MapView mapView = (MapView) inflater.inflate(R.layout., null);
         // Inflate the layout for this fragment
-        MapKitFactory.setApiKey(MAPKIT_API_KEY);
-        MapKitFactory.initialize(getActivity().getApplicationContext());
+
 
         View FragmentMapView = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        mapView = FragmentMapView.findViewById(R.id.mapview_xml);
+
 
       //  MapView mapView = FragmentMapView.findViewById(R.id.mapview);
 
-        ((MainActivity)getActivity()).onMapReady( mapView);
+
 
 
          FragmentMapView.findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
             @Override
            public void onClick(View v) {
                // ((MainActivity)getActivity()).checkuser();
-                ((MainActivity)getActivity()).cameraUserPosition(mapView);// FirebaseAuth.getInstance().signOut();
+
               }
            });
 
