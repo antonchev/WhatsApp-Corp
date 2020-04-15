@@ -122,7 +122,14 @@ public class GroupsFragment extends Fragment  {
             }
         });
 
-
+        Toolbar toolbar = FragmentGroupView.findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
 
         return FragmentGroupView;
