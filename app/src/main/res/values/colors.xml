@@ -13,4 +13,5 @@
     <color name="colorPrimaryDark">#03a9ad</color>
     <color name="colorAccent">#D81B60</color>
     <color name="view_gray">#8d95989a</color>
+    <color name="list_divider">#dedede</color>
 </resources>

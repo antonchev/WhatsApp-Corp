@@ -7,14 +7,32 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.ilocator.R;
-import com.ilocator.utils.MyAdapter;
+import com.ilocator.models.ChatRoom;
+import com.ilocator.utils.ChatRoomsAdapter;
 import com.ilocator.utils.MyApplication;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.yandex.runtime.Runtime.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,10 +51,11 @@ public class SettingsFragment extends Fragment  {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private static final String TAG = "Chat Room";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<ChatRoom> chatRoomArrayList;
 
     String[] myDataset = {"Создать группу","Создать группу"};
     public SettingsFragment() {
@@ -80,11 +99,77 @@ public class SettingsFragment extends Fragment  {
     public void onStart() {
         super.onStart();
 
-
+        fetchChatRooms();
 
     }
 
+    private void fetchChatRooms() {
 
+        String url = "https://sd.kubsite.ru/api/wa_dialogs_get ";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error flag
+                    if (obj.getBoolean("err") == false) {
+                        JSONArray chatRoomsArray = obj.getJSONArray("data");
+                        for (int i = 0; i < chatRoomsArray.length(); i++) {
+                            JSONObject chatRoomsObj = (JSONObject) chatRoomsArray.get(i);
+                            ChatRoom cr = new ChatRoom();
+                            cr.setId(chatRoomsObj.getString("to_phone"));
+                            cr.setName(chatRoomsObj.getString("to_phone")+"   "+chatRoomsObj.getString("c_name"));
+                            cr.setLastMessage("");
+                            cr.setUnreadCount(0);
+                            cr.setTimestamp(chatRoomsObj.getString("dt"));
+
+                            chatRoomArrayList.add(cr);
+                        }
+
+                    } else {
+                        // error in fetching chat rooms
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                mAdapter.notifyDataSetChanged();
+
+                // subscribing to all chat room topics
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", MyApplication.getInstance().getPrefManager().getUser().getToken());
+
+
+                Log.e(TAG, "params: " + params.toString());
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
 
 
 
@@ -121,9 +206,25 @@ public class SettingsFragment extends Fragment  {
 
 
 
+
+
+
+        chatRoomArrayList = new ArrayList<>();
+        mAdapter = new ChatRoomsAdapter(getContext(), chatRoomArrayList);
+
       //  MyAdapter.MyViewHolder my = new MyAdapter.MyViewHolder(FragmentSettingView);
 
-        mAdapter = new MyAdapter(getContext(),myDataset);
+
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new info.androidhive.gcm.helper.SimpleDividerItemDecoration(
+                getContext()
+        ));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+
         recyclerView.setAdapter(mAdapter);
 
 
