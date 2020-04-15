@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ import com.ilocator.R;
 import com.ilocator.models.ChatRoom;
 import com.ilocator.utils.ChatRoomsAdapter;
 import com.ilocator.utils.MyApplication;
+import com.ilocator.utils.SimpleDividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +49,7 @@ public class SettingsFragment extends Fragment  {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    TextView loading;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -91,7 +93,7 @@ public class SettingsFragment extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
+        TextView loading;
 
     }
 
@@ -142,7 +144,7 @@ public class SettingsFragment extends Fragment  {
                 }
 
                 mAdapter.notifyDataSetChanged();
-
+                loading.setVisibility(View.GONE);
                 // subscribing to all chat room topics
 
             }
@@ -169,6 +171,8 @@ public class SettingsFragment extends Fragment  {
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
+
+
     }
 
 
@@ -203,7 +207,7 @@ public class SettingsFragment extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-
+        loading =  FragmentSettingView.findViewById(R.id.wait);
 
 
 
@@ -218,7 +222,7 @@ public class SettingsFragment extends Fragment  {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new info.androidhive.gcm.helper.SimpleDividerItemDecoration(
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(
                 getContext()
         ));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

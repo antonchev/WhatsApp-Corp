@@ -1,10 +1,12 @@
 package com.ilocator.fragmnets;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -12,7 +14,12 @@ import androidx.fragment.app.Fragment;
 
 
 import com.ilocator.R;
+import com.ilocator.activities.MainActivity;
+import com.ilocator.activities.UsersActivity;
+import com.ilocator.services.gpsService;
 import com.ilocator.utils.MyApplication;
+
+import static com.yandex.runtime.Runtime.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,12 +110,17 @@ public class GroupsFragment extends Fragment  {
 
         name.setText(MyApplication.getInstance().getPrefManager().getUser().getName());
         email.setText(MyApplication.getInstance().getPrefManager().getUser().getEmail());
-
+        Button button = FragmentGroupView.findViewById(R.id.logout);
 
       //  MapView mapView = FragmentMapView.findViewById(R.id.mapview);
 
 
-
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyApplication.getInstance().logout();
+            }
+        });
 
 
 

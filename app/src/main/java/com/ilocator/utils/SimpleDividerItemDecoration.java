@@ -1,4 +1,4 @@
-package info.androidhive.gcm.helper;
+package com.ilocator.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
