@@ -125,9 +125,11 @@ public class SettingsFragment extends Fragment  {
                             JSONObject chatRoomsObj = (JSONObject) chatRoomsArray.get(i);
                             ChatRoom cr = new ChatRoom();
                             cr.setId(chatRoomsObj.getString("to_phone"));
-                            cr.setName(chatRoomsObj.getString("to_phone")+"   "+chatRoomsObj.getString("c_name"));
-                            cr.setLastMessage("");
-                            cr.setUnreadCount(0);
+                            cr.setName(chatRoomsObj.getString("c_name"));
+
+                            cr.setLastMessage(chatRoomsObj.getString("msg_last"));
+
+                            cr.setUnreadCount(chatRoomsObj.getInt("from_me_last"));
                             cr.setTimestamp(chatRoomsObj.getString("dt"));
 
                             chatRoomArrayList.add(cr);
