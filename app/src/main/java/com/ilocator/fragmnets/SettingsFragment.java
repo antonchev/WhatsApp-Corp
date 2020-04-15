@@ -119,7 +119,7 @@ public class SettingsFragment extends Fragment  {
                     JSONObject obj = new JSONObject(response);
 
                     // check for error flag
-                    if (obj.getBoolean("err") == false) {
+                    if (obj.getString("err") == "false") {
                         JSONArray chatRoomsArray = obj.getJSONArray("data");
                         for (int i = 0; i < chatRoomsArray.length(); i++) {
                             JSONObject chatRoomsObj = (JSONObject) chatRoomsArray.get(i);
@@ -133,14 +133,14 @@ public class SettingsFragment extends Fragment  {
                             chatRoomArrayList.add(cr);
                         }
 
-                    } else {
-                        // error in fetching chat rooms
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    } else  {
+                                              MyApplication.getInstance().logout();
+
                     }
 
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 mAdapter.notifyDataSetChanged();

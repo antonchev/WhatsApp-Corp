@@ -166,7 +166,7 @@ public class UsersActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject(response);
 
                     // check for error flag
-                    if (obj.getBoolean("err") == false) {
+                    if (obj.getString("err") == "false") {
                         // user successfully logged in
 
                         JSONObject userObj = obj.getJSONObject("data");
