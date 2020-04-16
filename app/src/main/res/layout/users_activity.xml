@@ -29,7 +29,7 @@
             android:text="Войти"
             />
 
-        <customfonts.MyTextView_Roboto_Regular
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -48,11 +48,11 @@
             android:layout_marginLeft="29dp"
             android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="211dp"
-                android:layout_height="177dp"
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_male_user_svgrepo_com" />
+                android:src="@drawable/ic_1781443" />
 
             <customfonts.EditText_Roboto_Regular
                 android:id="@+id/login"

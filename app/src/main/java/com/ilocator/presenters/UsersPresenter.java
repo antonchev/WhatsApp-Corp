@@ -27,7 +27,7 @@ import com.ilocator.R;
 import com.ilocator.activities.MainActivity;
 import com.ilocator.activities.UsersActivity;
 import com.ilocator.fragmnets.MapsFragment;
-import com.ilocator.models.UsersModel;
+import com.ilocator.models.User;
 import com.ilocator.services.workerClass;
 import com.ilocator.utils.MyApplication;
 import com.yandex.mapkit.Animation;
@@ -51,7 +51,7 @@ public class UsersPresenter {
     private UsersActivity view;
     private MainActivity view_main;
     private MapsFragment view_map_fragment;
-    private final UsersModel model;
+    private final User model;
     public Activity activity;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -70,7 +70,7 @@ public class UsersPresenter {
     public DatabaseReference mDatabase;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    public UsersPresenter(UsersModel model, Activity activity) {
+    public UsersPresenter(User model, Activity activity) {
         this.model = model;
         this.activity=activity;
     }
@@ -110,7 +110,7 @@ public class UsersPresenter {
             view_main.startActivity(intent);
             view_main.finish(); // call this to finish the current activity
         }
-        else {    view_main.showToast(MyApplication.getInstance().getPrefManager().getUser().getName());
+        else {    //view_main.showToast(MyApplication.getInstance().getPrefManager().getUser().getName());
         }
     }
 

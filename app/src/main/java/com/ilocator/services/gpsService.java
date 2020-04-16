@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.ilocator.R;
-import com.ilocator.models.UsersModel;
+import com.ilocator.models.User;
 import com.ilocator.presenters.UsersPresenter;
 import com.ilocator.activities.MainActivity;
 import com.yandex.mapkit.geometry.Point;
@@ -88,7 +88,7 @@ public class gpsService extends Service {
             startMyOwnForeground();
            // presenter.startWorker();
           //
-            final UsersModel usersModel = new UsersModel();
+            final User usersModel = new User();
             presenter = new UsersPresenter(usersModel, viewMain);
             presenter.attachViewMain(viewMain);
          //   PeriodicWorkRequest gps =

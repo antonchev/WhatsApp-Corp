@@ -19,14 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.ilocator.R;
-import com.ilocator.models.UsersModel;
+import com.ilocator.models.User;
 import com.ilocator.presenters.UsersPresenter;
-import com.ilocator.utils.EndPoints;
 
 
 import org.json.JSONException;
@@ -111,7 +106,7 @@ public class UsersActivity extends AppCompatActivity {
     }
 
     private void init() {
-        UsersModel usersModel = new UsersModel();
+        User usersModel = new User();
 
         presenter = new UsersPresenter(usersModel,this);
         presenter.attachView(this);
@@ -170,7 +165,7 @@ public class UsersActivity extends AppCompatActivity {
                         // user successfully logged in
 
                         JSONObject userObj = obj.getJSONObject("data");
-                        UsersModel user = new UsersModel(userObj.getString("id"),
+                        User user = new User(userObj.getString("id"),
                                 userObj.getString("name"),
                                 userObj.getString("email"),
                                 obj.getString("token"));

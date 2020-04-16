@@ -23,16 +23,13 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.ilocator.utils.CustomViewPager;
 import com.ilocator.R;
-import com.ilocator.models.UsersModel;
+import com.ilocator.models.User;
 import com.ilocator.presenters.UsersPresenter;
 import com.ilocator.utils.ViewPagerAdapter;
 import com.ilocator.fragmnets.GroupsFragment;
 import com.ilocator.fragmnets.MapsFragment;
 import com.ilocator.fragmnets.SettingsFragment;
 import com.ilocator.services.gpsService;
-
-import com.yandex.mapkit.mapview.MapView;
-
 
 
 public class MainActivity extends AppCompatActivity{
@@ -99,7 +96,7 @@ public class MainActivity extends AppCompatActivity{
     private void init() {
       //  mapView = findViewById(R.id.mapview);
         // ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        final UsersModel usersModel = new UsersModel();
+        final User usersModel = new User();
         presenter = new UsersPresenter(usersModel, this);
         presenter.attachViewMain(this);
 

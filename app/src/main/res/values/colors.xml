@@ -14,4 +14,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="view_gray">#8d95989a</color>
     <color name="list_divider">#dedede</color>
+    <color name="bg_bubble_self">#E1E1E1</color>
 </resources>

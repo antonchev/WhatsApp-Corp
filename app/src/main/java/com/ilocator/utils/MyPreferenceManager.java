@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.ilocator.models.UsersModel;
+import com.ilocator.models.User;
 
 
 /**
@@ -46,7 +46,7 @@ public class MyPreferenceManager {
     }
 
 
-    public void storeUser(UsersModel user) {
+    public void storeUser(User user) {
         editor.putString(KEY_USER_ID, user.getId());
         editor.putString(KEY_USER_NAME, user.getName());
         editor.putString(KEY_USER_EMAIL, user.getEmail());
@@ -56,7 +56,7 @@ public class MyPreferenceManager {
         Log.e(TAG, "User is stored in shared preferences. " + user.getName() + ", " + user.getEmail());
     }
 
-    public UsersModel getUser() {
+    public User getUser() {
         if (pref.getString(KEY_USER_ID, null) != null) {
             String id, name, email,token;
             id = pref.getString(KEY_USER_ID, null);
@@ -64,7 +64,7 @@ public class MyPreferenceManager {
             email = pref.getString(KEY_USER_EMAIL, null);
             token = pref.getString(KEY_USER_TOKEN, null);
 
-            UsersModel user = new UsersModel(id, name, email,token);
+            User user = new User(id, name, email,token);
             return user;
         }
         return null;

@@ -7,18 +7,20 @@ import java.io.Serializable;
 /**
  * Created by Lincoln on 07/01/16.
  */
-public class UsersModel implements Serializable {
+public class User implements Serializable {
     String id, name, email, token;
 
-    public UsersModel() {
+    public User() {
     }
 
-    public UsersModel(String id, String name, String email, String token) {
+    public User(String id, String name, String email, String token) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.token = token;
     }
+
+
 
     public String getToken() {
         return token;

@@ -1,6 +1,7 @@
 package com.ilocator.fragmnets;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ilocator.R;
+import com.ilocator.activities.ChatRoomActivity;
+import com.ilocator.activities.MainActivity;
 import com.ilocator.models.ChatRoom;
 import com.ilocator.utils.ChatRoomsAdapter;
 import com.ilocator.utils.MyApplication;
@@ -94,14 +97,14 @@ public class SettingsFragment extends Fragment  {
         }
 
         TextView loading;
-
+        fetchChatRooms();
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        fetchChatRooms();
+
 
     }
 
@@ -144,9 +147,9 @@ public class SettingsFragment extends Fragment  {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
                   //  Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-
-                mAdapter.notifyDataSetChanged();
                 loading.setVisibility(View.GONE);
+                mAdapter.notifyDataSetChanged();
+
                 // subscribing to all chat room topics
 
             }
@@ -233,7 +236,22 @@ public class SettingsFragment extends Fragment  {
 
         recyclerView.setAdapter(mAdapter);
 
+        recyclerView.addOnItemTouchListener(new ChatRoomsAdapter.RecyclerTouchListener(getContext(), recyclerView, new ChatRoomsAdapter.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                // when chat is clicked, launch full chat thread activity
+                ChatRoom chatRoom = chatRoomArrayList.get(position);
+                Intent intent = new Intent(getContext(), ChatRoomActivity.class);
+                intent.putExtra("chat_room_id", chatRoom.getId());
+                intent.putExtra("name", chatRoom.getName());
+                startActivity(intent);
+            }
 
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
 
         return FragmentSettingView;

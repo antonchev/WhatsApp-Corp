@@ -73,6 +73,10 @@
         <activity
             android:name=".activities.UsersActivity"
             android:label="login" />
+
+        <activity
+            android:name=".activities.ChatRoomActivity"
+            android:label="chat_room" />
     </application>
 
 </manifest>
