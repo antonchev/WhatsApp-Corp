@@ -287,6 +287,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             JSONObject commentObj = (JSONObject) commentsObj.get(i);
 
                             String commentId = chatRoomId;
+                            int from_me = commentObj.getInt("from_me");
                             String commentText = commentObj.getString("msg_text");
                             String createdAt = commentObj.getString("dt_ins");
 
@@ -300,6 +301,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             message.setMessage(commentText);
                             message.setCreatedAt(createdAt);
                             message.setUser(user);
+                            message.setFrom_me(from_me);
 
                             messageArrayList.add(message);
                         }

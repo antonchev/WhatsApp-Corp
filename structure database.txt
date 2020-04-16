@@ -1,0 +1,17 @@
+-group_id:	
+	-title: Семья
+	-invite:
+		-inique:
+			-created: 22.11.19
+			
+	-Members:
+		-inique:	
+			-name: Alex
+			-email: ant@nauk.ru
+			-devices:
+				-device_name:
+				-location:
+					-point:
+					-date:
+		
+		

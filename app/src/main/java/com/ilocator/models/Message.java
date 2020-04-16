@@ -10,15 +10,25 @@ import java.io.Serializable;
 public class Message implements Serializable {
     String id, message, createdAt;
     User user;
+    int from_me;
 
     public Message() {
     }
 
-    public Message(String id, String message, String createdAt, User user) {
+    public Message(String id, String message, String createdAt, User user, int from_me) {
         this.id = id;
         this.message = message;
         this.createdAt = createdAt;
+
         this.user = user;
+        this.from_me = from_me;
+    }
+    public int getFrom_me() {
+        return from_me;
+    }
+
+    public void setFrom_me(int from_me) {
+        this.from_me = from_me;
     }
 
     public String getId() {

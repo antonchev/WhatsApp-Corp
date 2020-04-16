@@ -31,7 +31,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static String today;
 
     private Context mContext;
-    private ArrayList<Message> messageArrayList;
+    public ArrayList<Message> messageArrayList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView message, timestamp;
@@ -59,7 +59,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         // view type is to identify where to render the chat message
         // left or right
-        if (viewType == SELF) {
+        if (viewType == 100) {
             // self message
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_self, parent, false);
@@ -77,8 +77,8 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public int getItemViewType(int position) {
         Message message = messageArrayList.get(position);
-        if (message.getUser().getId().equals(userId)) {
-            return SELF;
+        if (message.getFrom_me()==1) {
+            return 100;
         }
 
         return position;
