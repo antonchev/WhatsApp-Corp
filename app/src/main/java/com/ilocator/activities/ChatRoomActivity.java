@@ -34,7 +34,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +48,8 @@ import com.ilocator.utils.MyApplication;
 
 import info.androidhive.gcm.model.Message;
 import com.ilocator.models.User;
+
+import static info.androidhive.gcm.adapter.ChatRoomThreadAdapter.getTimeStamp;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
@@ -167,22 +171,19 @@ public class ChatRoomActivity extends AppCompatActivity {
      * to all the devices as push notification
      * */
     private void sendMessage() {
-        final String message = this.inputMessage.getText().toString().trim();
+        final String messageIN = this.inputMessage.getText().toString().trim();
 
-        if (TextUtils.isEmpty(message)) {
+        if (TextUtils.isEmpty(messageIN)) {
             Toast.makeText(getApplicationContext(), "Enter a message", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String url = "https://sd.kubsite.ru/api/wa_msg_get";
-
-
-
-
-
         this.inputMessage.setText("");
 
+        String url = "https://sd.kubsite.ru/api/wa_msg_put";
+
         StringRequest strReq = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
+
 
             @Override
             public void onResponse(String response) {
@@ -192,28 +193,34 @@ public class ChatRoomActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject(response);
 
                     // check for error
-                    if (obj.getString("err") == "false") {
+                    if (obj.getBoolean("err") == false) {
                         JSONObject commentObj = obj.getJSONObject("data");
-                        Log.e(TAG, "ID: " + commentObj.getString("cid"));
-                        String commentId = commentObj.getString("cid");
-                        String commentText = commentObj.getString("msg_text");
-                        String createdAt = commentObj.getString("dt_ins");
-                        String userId = chatRoomId;
-                        String userName = chatRoomId;
-                        User user = new User(userId, userName, null,null);
+
+                        String commentId = commentObj.getString("last_id");
+
+
+
+                        User user = new User(MyApplication.getInstance().getPrefManager().getUser().getId(), MyApplication.getInstance().getPrefManager().getUser().getName(), null,null);
+
                         Message message = new Message();
                         message.setId(commentId);
-                        message.setMessage(commentText);
-                        message.setCreatedAt(createdAt);
-                        message.setUser(user);
-                        messageArrayList.add(message);
-                        mAdapter.notifyDataSetChanged();
+                        message.setMessage(messageIN);
 
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+                        String format = simpleDateFormat.format(new Date());
+
+                        message.setCreatedAt(format);
+                        message.setUser(user);
+                        message.setFrom_me(1);
+
+                        messageArrayList.add(message);
+
+                        mAdapter.notifyDataSetChanged();
                         if (mAdapter.getItemCount() > 1) {
                             // scrolling to bottom of the recycler view
                             recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
                         }
-                     //   loading.setVisibility(View.GONE);
+
                     } else {
                         Toast.makeText(getApplicationContext(), "" + obj.getString("message"), Toast.LENGTH_LONG).show();
                     }
@@ -222,7 +229,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
                     Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-
             }
         }, new Response.ErrorListener() {
 
@@ -231,15 +237,16 @@ public class ChatRoomActivity extends AppCompatActivity {
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
                 Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                inputMessage.setText(message);
+                inputMessage.setText(messageIN);
             }
         }) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
-                params.put("message", message);
+                params.put("token", MyApplication.getInstance().getPrefManager().getUser().getToken());
+                params.put("text", messageIN);
+                params.put("phone", chatRoomId);
 
                 Log.e(TAG, "Params: " + params.toString());
 
@@ -259,8 +266,8 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
-
     }
+
 
 
     /**

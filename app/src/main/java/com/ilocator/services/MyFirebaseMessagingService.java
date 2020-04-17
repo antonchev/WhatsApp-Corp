@@ -63,8 +63,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Intent intent_service = new Intent(this, gpsService.class);
-         startForegroundService(intent_service);
+      //  Intent intent_service = new Intent(this, gpsService.class);
+        // startForegroundService(intent_service);
 
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages
@@ -89,6 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Log.d(TAG, "Message data payload: " +  remoteMessage.getData().get("paydata"));
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use WorkManager.

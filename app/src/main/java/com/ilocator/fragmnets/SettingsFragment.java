@@ -132,7 +132,7 @@ public class SettingsFragment extends Fragment  {
 
                             cr.setLastMessage(chatRoomsObj.getString("msg_last"));
 
-                            cr.setUnreadCount(chatRoomsObj.getInt("from_me_last"));
+                           // cr.setUnreadCount(chatRoomsObj.getInt("from_me_last"));
                             cr.setTimestamp(chatRoomsObj.getString("dt"));
 
                             chatRoomArrayList.add(cr);
