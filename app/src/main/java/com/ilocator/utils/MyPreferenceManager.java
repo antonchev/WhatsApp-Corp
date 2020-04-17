@@ -37,6 +37,7 @@ public class MyPreferenceManager {
     private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_USER_TOKEN = "token";
     private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String KEY_RUN = "run";
 
     // Constructor
     public MyPreferenceManager(Context context) {
@@ -44,7 +45,24 @@ public class MyPreferenceManager {
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
+    public void storeRun(String value) {
+        editor.putString(KEY_RUN, value);
+        editor.commit();
 
+        Log.e(TAG, "run_app " + value);
+    }
+
+    public String getRun() {
+        if (pref.getString(KEY_RUN, null) != null) {
+            String value;
+            value = pref.getString(KEY_RUN, null);
+
+
+
+            return value;
+        }
+        return null;
+    }
 
     public void storeUser(User user) {
         editor.putString(KEY_USER_ID, user.getId());

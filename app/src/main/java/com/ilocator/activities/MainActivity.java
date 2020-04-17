@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.ilocator.utils.CustomViewPager;
 import com.ilocator.R;
 import com.ilocator.models.User;
 import com.ilocator.presenters.UsersPresenter;
+import com.ilocator.utils.MyApplication;
 import com.ilocator.utils.ViewPagerAdapter;
 import com.ilocator.fragmnets.GroupsFragment;
 import com.ilocator.fragmnets.MapsFragment;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity{
      //   MapKitFactory.setApiKey(MAPKIT_API_KEY);
     //    MapKitFactory.initialize(this);
         setContentView(R.layout.activity_main);
+        MyApplication.getInstance().getPrefManager().storeRun("dialogs");
         init();
 
 
@@ -161,17 +165,43 @@ public class MainActivity extends AppCompatActivity{
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onStop() {
+    protected void onPause() {
        // mapView.onStop();
      //   MapKitFactory.getInstance().onStop();
        // presenter.unsubscribeToLocationUpdate();
        // presenter.startWorker();
 
-        Intent intent_service = new Intent(this, gpsService.class);
+
        // startForegroundService(intent_service);
 
+       MyApplication.getInstance().getPrefManager().storeRun("0");
+        super.onPause();
+    }
+    @Override
+    protected void onStop() {
+        // mapView.onStop();
+        //   MapKitFactory.getInstance().onStop();
+        // presenter.unsubscribeToLocationUpdate();
+        // presenter.startWorker();
+      Intent intent_service = new Intent(this, gpsService.class);
+        // startForegroundService(intent_service);
 
+    //    MyApplication.getInstance().getPrefManager().storeRun("0");
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // mapView.onStop();
+        //   MapKitFactory.getInstance().onStop();
+        // presenter.unsubscribeToLocationUpdate();
+        // presenter.startWorker();
+
+
+
+
+          //  MyApplication.getInstance().getPrefManager().storeRun("0");
+        super.onDestroy();
     }
 
     public void showToast(String resId) {
@@ -185,7 +215,7 @@ public class MainActivity extends AppCompatActivity{
       //  mapView.onStart();
         presenter.checkUser();
       //  presenter.subscribeToLocationUpdate();
-
+        MyApplication.getInstance().getPrefManager().storeRun("dialogs");
 
 
 
@@ -213,6 +243,18 @@ public class MainActivity extends AppCompatActivity{
                     }
                 });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // registering the receiver for new notification
+
+        MyApplication.getInstance().getPrefManager().storeRun("dialogs");
+        //   NotificationUtils.clearNotifications();
+    }
+
+
 
 
 

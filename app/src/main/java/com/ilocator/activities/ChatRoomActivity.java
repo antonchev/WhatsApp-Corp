@@ -43,6 +43,7 @@ import java.util.Map;
 import com.ilocator.R;
 import info.androidhive.gcm.adapter.ChatRoomThreadAdapter;
 
+import com.ilocator.services.gpsService;
 import com.ilocator.utils.EndPoints;
 import com.ilocator.utils.MyApplication;
 
@@ -129,6 +130,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         loading = findViewById(R.id.wait);
 
         fetchChatThread();
+
+        MyApplication.getInstance().getPrefManager().storeRun("messages");
     }
 
     @Override
@@ -145,6 +148,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        MyApplication.getInstance().getPrefManager().storeRun("0");
         super.onPause();
     }
 
@@ -354,5 +358,52 @@ public class ChatRoomActivity extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+
+    @Override
+    protected void onStop() {
+        // mapView.onStop();
+        //   MapKitFactory.getInstance().onStop();
+        // presenter.unsubscribeToLocationUpdate();
+        // presenter.startWorker();
+
+
+        // startForegroundService(intent_service);
+
+       // MyApplication.getInstance().getPrefManager().storeRun("0");
+        super.onStop();
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //    MapKitFactory.getInstance().onStart();
+        //  mapView.onStart();
+
+        //  presenter.subscribeToLocationUpdate();
+
+        MyApplication.getInstance().getPrefManager().storeRun("message");
+
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //    MapKitFactory.getInstance().onStart();
+        //  mapView.onStart();
+
+        //  presenter.subscribeToLocationUpdate();
+
+       // MyApplication.getInstance().getPrefManager().storeRun("0");
+
+
+    }
+
+
+
 
 }

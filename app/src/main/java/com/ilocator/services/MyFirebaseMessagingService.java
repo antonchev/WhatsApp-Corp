@@ -33,6 +33,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ilocator.R;
 import com.ilocator.activities.MainActivity;
+import com.ilocator.utils.MyApplication;
 
 
 import androidx.work.OneTimeWorkRequest;
@@ -89,7 +90,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            Log.d(TAG, "Message data payload: " +  remoteMessage.getData().get("paydata"));
+        //    Log.d(TAG, "Message data payload: " +  remoteMessage.getData().get("paydata"));
+
+
+            if ( MyApplication.getInstance().getPrefManager().getRun()=="dialogs")
+                Log.d(TAG, "Диалоги");
+            else if (MyApplication.getInstance().getPrefManager().getRun()=="message")
+                Log.d(TAG, "Сообщения");
+
+            else {Log.d(TAG, "Не запущено");}
+
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
