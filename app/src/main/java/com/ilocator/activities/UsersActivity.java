@@ -15,10 +15,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.ilocator.R;
 import com.ilocator.models.User;
 import com.ilocator.presenters.UsersPresenter;
@@ -44,6 +50,7 @@ public class UsersActivity extends AppCompatActivity {
     private static final int PERMISSIONS_CODE = 109;
     EditText Login, Pass;
     Button  btnEnter;
+    private static String push_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,28 @@ public class UsersActivity extends AppCompatActivity {
       //  addAutoStartup();
      //   checkPermission();
         init();
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Push", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        push_id = task.getResult().getToken();
+
+
+
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, push_id);
+                        Log.d("Push", msg);
+                        //   Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
     private void addAutoStartup() {
@@ -199,9 +228,15 @@ public class UsersActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
+
                 Map<String, String> params = new HashMap<>();
+
                 params.put("login", login);
                 params.put("pass", pass);
+                params.put("push_id", push_id);
+
+
+
 
                 Log.e(TAG, "params: " + params.toString());
                 return params;

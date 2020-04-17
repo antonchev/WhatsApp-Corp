@@ -8,21 +8,29 @@ import java.io.Serializable;
  * Created by Lincoln on 07/01/16.
  */
 public class Message implements Serializable {
-    String id, message, createdAt;
+    String id, message, createdAt,author;
     User user;
     int from_me;
 
     public Message() {
     }
 
-    public Message(String id, String message, String createdAt, User user, int from_me) {
+    public Message(String id, String message, String createdAt, User user, int from_me, String author) {
         this.id = id;
         this.message = message;
         this.createdAt = createdAt;
-
         this.user = user;
         this.from_me = from_me;
+        this.author = author;
     }
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public int getFrom_me() {
         return from_me;
     }

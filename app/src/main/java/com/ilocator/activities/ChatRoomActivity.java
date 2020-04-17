@@ -212,6 +212,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                         message.setCreatedAt(format);
                         message.setUser(user);
                         message.setFrom_me(1);
+                        message.setAuthor(user.getName());
 
                         messageArrayList.add(message);
 
@@ -297,7 +298,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             int from_me = commentObj.getInt("from_me");
                             String commentText = commentObj.getString("msg_text");
                             String createdAt = commentObj.getString("dt_ins");
-
+                            String author = commentObj.getString("u_name");
 
                             String userId = chatRoomId;
                             String userName = chatRoomId;
@@ -309,6 +310,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                             message.setCreatedAt(createdAt);
                             message.setUser(user);
                             message.setFrom_me(from_me);
+                            message.setAuthor(author);
+
 
                             messageArrayList.add(message);
                         }
