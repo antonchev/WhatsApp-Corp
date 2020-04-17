@@ -28,16 +28,23 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ilocator.R;
 import com.ilocator.activities.MainActivity;
+import com.ilocator.fragmnets.SettingsFragment;
+import com.ilocator.models.User;
 import com.ilocator.utils.MyApplication;
 
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * NOTE: There can only be one service in each app that receives FCM messages. If multiple
@@ -91,13 +98,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         //    Log.d(TAG, "Message data payload: " +  remoteMessage.getData().get("paydata"));
+String dialog = MyApplication.getInstance().getPrefManager().getRun();
 
-
-            if ( MyApplication.getInstance().getPrefManager().getRun()=="dialogs")
+            if (dialog.equals("dialogs")){
+               String to_phone = remoteMessage.getData().get("to_phone");
+                String msg_text = remoteMessage.getData().get("msg_text");
+                processChatRoomPush(to_phone,msg_text,"0");
                 Log.d(TAG, "Диалоги");
-            else if (MyApplication.getInstance().getPrefManager().getRun()=="message")
+                Log.d(TAG, "Data" + to_phone+msg_text);
+
+            }  else
+            if (dialog.equals("message")) {
                 Log.d(TAG, "Сообщения");
 
+                String to_phone = remoteMessage.getData().get("to_phone");
+                String msg_text = remoteMessage.getData().get("msg_text");
+                String dt_ins = remoteMessage.getData().get("dt_ins");
+                String from_me = remoteMessage.getData().get("from_me");
+
+                if (from_me.equals("0"))
+
+                {
+                    processChatRoomPush(to_phone,msg_text,from_me);
+
+                }
+            }
             else {Log.d(TAG, "Не запущено");}
 
 
@@ -121,8 +146,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
     }
     // [END receive_message]
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+    private void processChatRoomPush(String phone, String msg_text, String from_me) {
+        Intent pushNotification = new Intent(PUSH_NOTIFICATION);
 
 
+
+
+
+
+
+
+
+
+
+        pushNotification.putExtra("to_phone", phone);
+        pushNotification.putExtra("msg_text", msg_text);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+    }
     // [START on_new_token]
 
     /**

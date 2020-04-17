@@ -215,8 +215,8 @@ public class MainActivity extends AppCompatActivity{
       //  mapView.onStart();
         presenter.checkUser();
       //  presenter.subscribeToLocationUpdate();
-        MyApplication.getInstance().getPrefManager().storeRun("dialogs");
 
+        MyApplication.getInstance().getPrefManager().storeRun("dialogs");
 
 
 
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity{
 
         // registering the receiver for new notification
 
-        MyApplication.getInstance().getPrefManager().storeRun("dialogs");
+      //  MyApplication.getInstance().getPrefManager().storeRun("dialogs");
         //   NotificationUtils.clearNotifications();
     }
 

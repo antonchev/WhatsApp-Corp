@@ -134,6 +134,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().getPrefManager().storeRun("messages");
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();

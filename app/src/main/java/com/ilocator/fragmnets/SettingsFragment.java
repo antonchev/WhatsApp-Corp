@@ -1,7 +1,10 @@
 package com.ilocator.fragmnets;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,7 +65,7 @@ public class SettingsFragment extends Fragment  {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<ChatRoom> chatRoomArrayList;
-
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
     String[] myDataset = {"Создать группу","Создать группу"};
     public SettingsFragment() {
         // Required empty public constructor
@@ -98,6 +102,17 @@ public class SettingsFragment extends Fragment  {
 
         TextView loading;
         fetchChatRooms();
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+
+
+                handlePushNotification(intent);
+            }};
+
     }
 
     @Override
@@ -107,6 +122,44 @@ public class SettingsFragment extends Fragment  {
 
 
     }
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(PUSH_NOTIFICATION));
+
+    }
+
+
+
+    private void handlePushNotification(Intent intent) {
+        String to_phone = intent.getStringExtra("to_phone");
+
+
+
+        String msg_text = intent.getStringExtra("msg_text");
+
+
+            updateRow(to_phone, msg_text);
+
+    }
+    private void updateRow(String chatRoomId, String message) {
+        for (ChatRoom cr : chatRoomArrayList) {
+            if (cr.getId().equals(chatRoomId)) {
+                int index = chatRoomArrayList.indexOf(cr);
+                cr.setLastMessage(message);
+                cr.setUnreadCount(cr.getUnreadCount() + 1);
+                chatRoomArrayList.remove(index);
+                chatRoomArrayList.add(index, cr);
+                break;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+
 
     private void fetchChatRooms() {
 
@@ -136,6 +189,7 @@ public class SettingsFragment extends Fragment  {
                             cr.setTimestamp(chatRoomsObj.getString("dt"));
 
                             chatRoomArrayList.add(cr);
+
                         }
 
                     } else  {
