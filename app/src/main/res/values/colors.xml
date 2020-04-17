@@ -9,8 +9,8 @@
 
     <!--colros for card-->
     <color name="whiteCardColor">#fff</color>
-    <color name="colorPrimary">#03a9ad</color>
-    <color name="colorPrimaryDark">#03a9ad</color>
+    <color name="colorPrimary">#095e57</color>
+    <color name="colorPrimaryDark">#095e57</color>
     <color name="colorAccent">#D81B60</color>
     <color name="view_gray">#8d95989a</color>
     <color name="list_divider">#dedede</color>
