@@ -135,21 +135,24 @@ public class SettingsFragment extends Fragment  {
 
 
     private void handlePushNotification(Intent intent) {
+
         String to_phone = intent.getStringExtra("to_phone");
+        info.androidhive.gcm.model.Message message = (info.androidhive.gcm.model.Message) intent.getSerializableExtra("msg_text");
 
 
+        String msg_text = message.getMessage();
+        String timestamp = message.getCreatedAt();
 
-        String msg_text = intent.getStringExtra("msg_text");
 
-
-            updateRow(to_phone, msg_text);
+            updateRow(to_phone, msg_text,timestamp);
 
     }
-    private void updateRow(String chatRoomId, String message) {
+    public void updateRow(String chatRoomId, String message, String timestamp) {
         for (ChatRoom cr : chatRoomArrayList) {
             if (cr.getId().equals(chatRoomId)) {
                 int index = chatRoomArrayList.indexOf(cr);
                 cr.setLastMessage(message);
+                cr.setTimestamp(timestamp);
                 cr.setUnreadCount(cr.getUnreadCount() + 1);
                 chatRoomArrayList.remove(index);
                 chatRoomArrayList.add(index, cr);
@@ -163,7 +166,7 @@ public class SettingsFragment extends Fragment  {
 
     private void fetchChatRooms() {
 
-        String url = "https://sd.kubsite.ru/api/wa_dialogs_get ";
+        String url = "https://"+MyApplication.getInstance().getPrefManager().getHost()+"/api/wa_dialogs_get ";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
 

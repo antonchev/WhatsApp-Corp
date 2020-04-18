@@ -38,6 +38,7 @@ public class MyPreferenceManager {
     private static final String KEY_USER_TOKEN = "token";
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String KEY_RUN = "run";
+    private static final String HOST = "host";
 
     // Constructor
     public MyPreferenceManager(Context context) {
@@ -45,12 +46,42 @@ public class MyPreferenceManager {
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
+
+
+    public void storeHost(String value) {
+        editor.putString(HOST, value);
+        editor.commit();
+
+        Log.e(TAG, "HOST " + value);
+    }
+
+
+
+    public String getHost() {
+        if (pref.getString(HOST, null) != null) {
+            String value;
+            value = pref.getString(HOST, null);
+
+
+
+            return value;
+        }
+        return null;
+    }
+
+
+
+
+
+
     public void storeRun(String value) {
         editor.putString(KEY_RUN, value);
         editor.commit();
 
         Log.e(TAG, "run_app " + value);
     }
+
+
 
     public String getRun() {
         if (pref.getString(KEY_RUN, null) != null) {

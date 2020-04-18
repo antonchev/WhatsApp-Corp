@@ -46,6 +46,9 @@ import androidx.work.WorkManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * NOTE: There can only be one service in each app that receives FCM messages. If multiple
  * are declared in the Manifest then the first one will be chosen.
@@ -103,7 +106,10 @@ String dialog = MyApplication.getInstance().getPrefManager().getRun();
             if (dialog.equals("dialogs")){
                String to_phone = remoteMessage.getData().get("to_phone");
                 String msg_text = remoteMessage.getData().get("msg_text");
-                processChatRoomPush(to_phone,msg_text,"0");
+                String dt_ins = remoteMessage.getData().get("dt_ins");
+                String cid = remoteMessage.getData().get("cid");
+
+                processChatRoomPush(to_phone,msg_text,0,cid,dt_ins,null);
                 Log.d(TAG, "Диалоги");
                 Log.d(TAG, "Data" + to_phone+msg_text);
 
@@ -115,12 +121,17 @@ String dialog = MyApplication.getInstance().getPrefManager().getRun();
                 String msg_text = remoteMessage.getData().get("msg_text");
                 String dt_ins = remoteMessage.getData().get("dt_ins");
                 String from_me = remoteMessage.getData().get("from_me");
+                String cid = remoteMessage.getData().get("cid");
+                String u_name = remoteMessage.getData().get("u_name");
 
                 if (from_me.equals("0"))
 
                 {
-                    processChatRoomPush(to_phone,msg_text,from_me);
+                    processChatRoomPush(to_phone,msg_text,0,cid,dt_ins,    null);
 
+                } else if (from_me.equals("1"))
+                {
+                    processChatRoomPush(to_phone,msg_text,1,cid,dt_ins,u_name);
                 }
             }
             else {Log.d(TAG, "Не запущено");}
@@ -137,31 +148,42 @@ String dialog = MyApplication.getInstance().getPrefManager().getRun();
         }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody()+remoteMessage.getData());
-            sendNotification(remoteMessage.getNotification().getBody());
-        }
+  //      if (remoteMessage.getNotification() != null) {
+       //     Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody()+remoteMessage.getData());
+       //     sendNotification(remoteMessage.getNotification().getBody());
+      //  }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
     // [END receive_message]
     public static final String PUSH_NOTIFICATION = "pushNotification";
-    private void processChatRoomPush(String phone, String msg_text, String from_me) {
+    private void processChatRoomPush(String phone, String msg_text, int from_me, String cid, String dt_ins, String Author) {
+
+        User user = new User(MyApplication.getInstance().getPrefManager().getUser().getId(), MyApplication.getInstance().getPrefManager().getUser().getName(), null,null);
+
+        info.androidhive.gcm.model.Message message = new info.androidhive.gcm.model.Message();
+        message.setId(cid);
+        message.setMessage(msg_text);
+
+
+
+        message.setCreatedAt(dt_ins);
+        message.setUser(user);
+        message.setFrom_me(from_me);
+
+        if (Author!=null)
+        message.setAuthor(Author);
+
+
+
+
+
+
+
         Intent pushNotification = new Intent(PUSH_NOTIFICATION);
-
-
-
-
-
-
-
-
-
-
-
         pushNotification.putExtra("to_phone", phone);
-        pushNotification.putExtra("msg_text", msg_text);
+        pushNotification.putExtra("msg_text", message);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
     }

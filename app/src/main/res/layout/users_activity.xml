@@ -91,6 +91,29 @@
                 android:textColor="#9391a4"
 
                 />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_gray"
+                android:layout_marginTop="18dp"
+                />
+
+            <customfonts.EditText_Roboto_Regular
+                android:id="@+id/host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13.3dp"
+                android:background="#00000000"
+                android:fontFamily="sans-serif-light"
+                android:hint="Host"
+                android:inputType="text"
+                android:paddingRight="20dp"
+                android:text="sd.kubsite.ru"
+                android:textColor="#9391a4"
+                android:textSize="25sp"
+                android:textStyle="normal"
+
+                />
 
             <View
                 android:layout_width="match_parent"

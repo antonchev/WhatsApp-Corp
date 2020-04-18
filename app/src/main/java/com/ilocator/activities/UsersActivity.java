@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ilocator.R;
 import com.ilocator.models.User;
 import com.ilocator.presenters.UsersPresenter;
@@ -48,7 +49,7 @@ public class UsersActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private UsersPresenter presenter;
     private static final int PERMISSIONS_CODE = 109;
-    EditText Login, Pass;
+    EditText Login, Pass, mHost;
     Button  btnEnter;
     private static String push_id;
 
@@ -58,6 +59,7 @@ public class UsersActivity extends AppCompatActivity {
         setContentView(R.layout.users_activity);
       //  addAutoStartup();
      //   checkPermission();
+
         init();
 
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -135,6 +137,11 @@ public class UsersActivity extends AppCompatActivity {
     }
 
     private void init() {
+
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+
+
         User usersModel = new User();
 
         presenter = new UsersPresenter(usersModel,this);
@@ -143,7 +150,9 @@ public class UsersActivity extends AppCompatActivity {
         Login = (EditText) findViewById(R.id.login);
         Pass = (EditText) findViewById(R.id.pass);
         btnEnter = (Button) findViewById(R.id.btn_login);
-
+        mHost = (EditText) findViewById(R.id.host);
+        final String host = mHost.getText().toString();
+        MyApplication.getInstance().getPrefManager().storeHost(host);
      //   login.addTextChangedListener(new MyTextWatcher(login));
      //   pass.addTextChangedListener(new MyTextWatcher(pass));
 
@@ -174,11 +183,12 @@ public class UsersActivity extends AppCompatActivity {
 
         final String login = Login.getText().toString();
         final String pass = Pass.getText().toString();
+        final String Host = mHost.getText().toString();
 
         StringRequest strReq;
 
 
-        String url = "https://sd.kubsite.ru/api/user_login";
+        String url = "https://"+Host+"/api/user_login";
         strReq = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>(){
 

@@ -89,12 +89,14 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Message message = messageArrayList.get(position);
         ((ViewHolder) holder).message.setText(message.getMessage());
 
-        String timestamp = getTimeStamp(message.getCreatedAt());
 
-        if (message.getAuthor() != "null")
-            timestamp =  message.getAuthor() + ", " + message.getCreatedAt();
 
-        ((ViewHolder) holder).timestamp.setText(timestamp);
+        if (message.getAuthor()=="null")
+            ((ViewHolder) holder).timestamp.setText(message.getCreatedAt());
+         else
+        ((ViewHolder) holder).timestamp.setText(message.getAuthor()+" "+message.getCreatedAt());
+      //  ((ViewHolder) holder).timestamp.setText(message.getCreatedAt());
+
     }
 
     @Override

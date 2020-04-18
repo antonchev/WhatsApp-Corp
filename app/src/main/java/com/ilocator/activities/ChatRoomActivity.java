@@ -49,6 +49,7 @@ import com.ilocator.utils.MyApplication;
 
 import info.androidhive.gcm.model.Message;
 import com.ilocator.models.User;
+import com.ilocator.utils.SpeedyLinearLayoutManager;
 
 import static info.androidhive.gcm.adapter.ChatRoomThreadAdapter.getTimeStamp;
 
@@ -105,7 +106,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         mAdapter = new ChatRoomThreadAdapter(this, messageArrayList, selfUserId);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new SpeedyLinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -144,7 +145,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(PUSH_NOTIFICATION));
 
-     //   NotificationUtils.clearNotifications();
+
     }
 
     @Override
@@ -159,15 +160,16 @@ public class ChatRoomActivity extends AppCompatActivity {
      * recycler view and scroll it to bottom
      * */
     private void handlePushNotification(Intent intent) {
-        Message message = (Message) intent.getSerializableExtra("message");
-        String chatRoomId = intent.getStringExtra("chat_room_id");
-
+        Message message = (Message) intent.getSerializableExtra("msg_text");
+        String chatRoomId_loc = intent.getStringExtra("to_phone");
+        if (chatRoomId.equals(chatRoomId_loc)){
         if (message != null && chatRoomId != null) {
             messageArrayList.add(message);
             mAdapter.notifyDataSetChanged();
             if (mAdapter.getItemCount() > 1) {
                 recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
             }
+        }
         }
     }
 
@@ -176,6 +178,10 @@ public class ChatRoomActivity extends AppCompatActivity {
      * will make an http call to our server. Our server again sends the message
      * to all the devices as push notification
      * */
+
+
+
+
     private void sendMessage() {
         final String messageIN = this.inputMessage.getText().toString().trim();
 
@@ -186,7 +192,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         this.inputMessage.setText("");
 
-        String url = "https://sd.kubsite.ru/api/wa_msg_put";
+        String url = "https://"+MyApplication.getInstance().getPrefManager().getHost()+"/api/wa_msg_put";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
 
@@ -282,7 +288,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      * */
     private void fetchChatThread() {
 
-        String url = "https://sd.kubsite.ru/api/wa_msg_get";
+        String url = "https://"+MyApplication.getInstance().getPrefManager().getHost()+"/api/wa_msg_get";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
 
