@@ -264,12 +264,7 @@ String dialog = MyApplication.getInstance().getPrefManager().getRun();
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
+
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }

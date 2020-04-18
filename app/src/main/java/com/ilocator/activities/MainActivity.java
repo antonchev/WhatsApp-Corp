@@ -9,8 +9,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,6 +58,24 @@ public class MainActivity extends AppCompatActivity{
         init();
 
 
+        NotificationManager notificationManager =(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Uri notification_sound  = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("1", "Уведомления", NotificationManager.IMPORTANCE_HIGH);
+
+
+            AudioAttributes attributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+
+
+            notificationChannel.setSound(notification_sound, attributes);//for enable sound
+
+            notificationChannel.enableLights(true);
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
 
 
     }
