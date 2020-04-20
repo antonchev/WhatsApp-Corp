@@ -73,8 +73,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-      //  Intent intent_service = new Intent(this, gpsService.class);
+        String to_phone, msg_text;
+        //  Intent intent_service = new Intent(this, gpsService.class);
         // startForegroundService(intent_service);
 
         // [START_EXCLUDE]
@@ -85,7 +85,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // traditionally used with GCM. Notification messages are only received here in
         // onMessageReceived when the app
         // is in the foreground. When the app is in the background an automatically generated
-        // notification is displayed.
+        // notification is displayed.mWhat
         // When the user taps on the notification they are returned to the app. Messages
         // containing both notification
         // and data payloads are treated as notification messages. The Firebase console always
@@ -100,52 +100,48 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-        //    Log.d(TAG, "Message data payload: " +  remoteMessage.getData().get("paydata"));
-String dialog = MyApplication.getInstance().getPrefManager().getRun();
+            //    Log.d(TAG, "Message data payload: " +  remoteMessage.getData().get("paydata"));
+            String dialog = MyApplication.getInstance().getPrefManager().getRun();
 
-            if (dialog.equals("dialogs")){
-               String to_phone = remoteMessage.getData().get("to_phone");
-                String msg_text = remoteMessage.getData().get("msg_text");
+            if (dialog.equals("dialogs")) {
+                to_phone = remoteMessage.getData().get("to_phone");
+                msg_text = remoteMessage.getData().get("msg_text");
                 String dt_ins = remoteMessage.getData().get("dt_ins");
                 String cid = remoteMessage.getData().get("cid");
 
-                processChatRoomPush(to_phone,msg_text,0,cid,dt_ins,null);
+                processChatRoomPush(to_phone, msg_text, 0, cid, dt_ins, null);
                 Log.d(TAG, "Диалоги");
-                Log.d(TAG, "Data" + to_phone+msg_text);
+                Log.d(TAG, "Data" + to_phone + msg_text);
 
-            }  else
-            if (dialog.equals("message")) {
+            } else if (dialog.equals("message")) {
                 Log.d(TAG, "Сообщения");
 
-                String to_phone = remoteMessage.getData().get("to_phone");
-                String msg_text = remoteMessage.getData().get("msg_text");
+                to_phone = remoteMessage.getData().get("to_phone");
+                msg_text = remoteMessage.getData().get("msg_text");
                 String dt_ins = remoteMessage.getData().get("dt_ins");
                 String from_me = remoteMessage.getData().get("from_me");
                 String cid = remoteMessage.getData().get("cid");
                 String u_name = remoteMessage.getData().get("u_name");
 
-                if (from_me.equals("0"))
+                if (from_me.equals("0")) {
+                    processChatRoomPush(to_phone, msg_text, 0, cid, dt_ins, null);
 
-                {
-                    processChatRoomPush(to_phone,msg_text,0,cid,dt_ins,    null);
-
-                } else if (from_me.equals("1"))
-                {
-                    processChatRoomPush(to_phone,msg_text,1,cid,dt_ins,u_name);
+                } else if (from_me.equals("1")) {
+                    processChatRoomPush(to_phone, msg_text, 1, cid, dt_ins, u_name);
                 }
-            }
-            else {Log.d(TAG, "Не запущено");}
-
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-               // scheduleJob();
             } else {
-                // Handle message within 10 seconds
-                handleNow();
+                to_phone = remoteMessage.getData().get("to_phone");
+                msg_text = remoteMessage.getData().get("msg_text");
+                sendNotification(to_phone, msg_text);
+                Log.d(TAG, "Не запущено");
             }
 
         }
+    }
+
+
+
+
 
         // Check if message contains a notification payload.
   //      if (remoteMessage.getNotification() != null) {
@@ -155,7 +151,7 @@ String dialog = MyApplication.getInstance().getPrefManager().getRun();
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-    }
+
     // [END receive_message]
     public static final String PUSH_NOTIFICATION = "pushNotification";
     private void processChatRoomPush(String phone, String msg_text, int from_me, String cid, String dt_ins, String Author) {
@@ -243,20 +239,21 @@ String dialog = MyApplication.getInstance().getPrefManager().getRun();
      */
 
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title,String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId = getString(R.string.default_notification_channel_id);
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
+                new NotificationCompat.Builder(this, "1")
                         .setSmallIcon(R.drawable.ic_stat_ic_notification)
-                        .setContentTitle(getString(R.string.fcm_message))
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
+                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
