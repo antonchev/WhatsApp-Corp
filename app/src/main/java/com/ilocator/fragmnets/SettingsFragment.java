@@ -149,7 +149,9 @@ public class SettingsFragment extends Fragment  {
             String msg_text = message.getMessage();
             String timestamp = message.getCreatedAt();
             updateRow(to_phone, msg_text,timestamp);
-        } else {updateUnread(to_phone);}
+        } else {
+            //updateUnread(to_phone);
+        }
 
     }
 
@@ -157,7 +159,9 @@ public class SettingsFragment extends Fragment  {
         for (ChatRoom cr : chatRoomArrayList) {
             if (cr.getId().equals(chatRoomId)) {
                 int index = chatRoomArrayList.indexOf(cr);
-                cr.setUnreadCount(0);
+                cr.setUnreadCount(10);
+                cr.setLastMessage(cr.getLastMessage());
+                cr.setTimestamp(cr.getTimestamp());
                 chatRoomArrayList.remove(index);
                 chatRoomArrayList.add(index, cr);
                 break;
