@@ -134,7 +134,7 @@ public class SettingsFragment extends Fragment  {
 
 
 
-    private void handlePushNotification(Intent intent) {
+    public void handlePushNotification(Intent intent) {
 
         String to_phone = intent.getStringExtra("to_phone");
         info.androidhive.gcm.model.Message message = (info.androidhive.gcm.model.Message) intent.getSerializableExtra("msg_text");

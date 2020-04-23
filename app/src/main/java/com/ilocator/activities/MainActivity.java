@@ -47,6 +47,14 @@ public class MainActivity extends AppCompatActivity{
 
     CustomViewPager viewPager;
     ViewPagerAdapter adapter;
+
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
