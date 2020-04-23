@@ -65,6 +65,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private EditText inputMessage;
     private TextView loading;
     private Button btnSend;
+    String chatRoomId_loc;
     public static final String PUSH_NOTIFICATION = "pushNotification";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +136,22 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().getPrefManager().storeRun("messages");
     }
 
+    @Override
+    public void onBackPressed() {
+
+            //  viewPager.setCurrentItem(viewPager.getCurrentItem() ,false);
+        Intent pushNotification = new Intent(PUSH_NOTIFICATION);
+        pushNotification.putExtra("unread", "0");
+        pushNotification.putExtra("to_phone", chatRoomId_loc);
+
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+            finish();
+
+
+
+    }
+
 
 
     @Override
@@ -161,7 +178,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      * */
     private void handlePushNotification(Intent intent) {
         Message message = (Message) intent.getSerializableExtra("msg_text");
-        String chatRoomId_loc = intent.getStringExtra("to_phone");
+        chatRoomId_loc = intent.getStringExtra("to_phone");
         if (chatRoomId.equals(chatRoomId_loc)){
         if (message != null && chatRoomId != null) {
             messageArrayList.add(message);

@@ -133,7 +133,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else {
                 to_phone = remoteMessage.getData().get("to_phone");
                 msg_text = remoteMessage.getData().get("msg_text");
+                String dt_ins = remoteMessage.getData().get("dt_ins");
+                String cid = remoteMessage.getData().get("cid");
                 sendNotification(to_phone, msg_text);
+                processChatRoomPush(to_phone, msg_text, 0, cid, dt_ins, null);
                 Log.d(TAG, "Не запущено");
             }
 
