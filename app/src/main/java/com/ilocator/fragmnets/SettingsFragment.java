@@ -134,18 +134,40 @@ public class SettingsFragment extends Fragment  {
 
 
 
-    private void handlePushNotification(Intent intent) {
+    public void handlePushNotification(Intent intent) {
 
         String to_phone = intent.getStringExtra("to_phone");
-        info.androidhive.gcm.model.Message message = (info.androidhive.gcm.model.Message) intent.getSerializableExtra("msg_text");
+        String unread = intent.getStringExtra("unread");
 
 
-        String msg_text = message.getMessage();
-        String timestamp = message.getCreatedAt();
 
 
+
+
+        if (unread==null){
+            info.androidhive.gcm.model.Message message = (info.androidhive.gcm.model.Message) intent.getSerializableExtra("msg_text");
+            String msg_text = message.getMessage();
+            String timestamp = message.getCreatedAt();
             updateRow(to_phone, msg_text,timestamp);
+        } else {
+            //updateUnread(to_phone);
+        }
 
+    }
+
+    public void updateUnread(String chatRoomId) {
+        for (ChatRoom cr : chatRoomArrayList) {
+            if (cr.getId().equals(chatRoomId)) {
+                int index = chatRoomArrayList.indexOf(cr);
+                cr.setUnreadCount(10);
+                cr.setLastMessage(cr.getLastMessage());
+                cr.setTimestamp(cr.getTimestamp());
+                chatRoomArrayList.remove(index);
+                chatRoomArrayList.add(index, cr);
+                break;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
     public void updateRow(String chatRoomId, String message, String timestamp) {
         for (ChatRoom cr : chatRoomArrayList) {
@@ -153,7 +175,7 @@ public class SettingsFragment extends Fragment  {
                 int index = chatRoomArrayList.indexOf(cr);
                 cr.setLastMessage(message);
                 cr.setTimestamp(timestamp);
-                cr.setUnreadCount(cr.getUnreadCount() + 1);
+                cr.setUnreadCount(cr.getUnreadCount()+ 1);
                 chatRoomArrayList.remove(index);
                 chatRoomArrayList.add(index, cr);
                 break;
@@ -185,6 +207,10 @@ public class SettingsFragment extends Fragment  {
                             ChatRoom cr = new ChatRoom();
                             cr.setId(chatRoomsObj.getString("to_phone"));
                             cr.setName(chatRoomsObj.getString("c_name"));
+                            if (chatRoomsObj.getString("viewed").equals("0"))
+                            {
+                                cr.setUnreadCount(1);
+                            }
 
                             cr.setLastMessage(chatRoomsObj.getString("msg_last"));
 
@@ -298,6 +324,7 @@ public class SettingsFragment extends Fragment  {
             public void onClick(View view, int position) {
                 // when chat is clicked, launch full chat thread activity
                 ChatRoom chatRoom = chatRoomArrayList.get(position);
+                chatRoom.setUnreadCount(0);
                 Intent intent = new Intent(getContext(), ChatRoomActivity.class);
                 intent.putExtra("chat_room_id", chatRoom.getId());
                 intent.putExtra("name", chatRoom.getName());
