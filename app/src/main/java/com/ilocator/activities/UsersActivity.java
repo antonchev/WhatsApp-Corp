@@ -151,8 +151,7 @@ public class UsersActivity extends AppCompatActivity {
         Pass = (EditText) findViewById(R.id.pass);
         btnEnter = (Button) findViewById(R.id.btn_login);
         mHost = (EditText) findViewById(R.id.host);
-        final String host = mHost.getText().toString();
-        MyApplication.getInstance().getPrefManager().storeHost(host);
+
      //   login.addTextChangedListener(new MyTextWatcher(login));
      //   pass.addTextChangedListener(new MyTextWatcher(pass));
 
@@ -181,14 +180,17 @@ public class UsersActivity extends AppCompatActivity {
      //       return;
      //   }
 
+        final String host = mHost.getText().toString();
+        MyApplication.getInstance().getPrefManager().storeHost(host);
+
         final String login = Login.getText().toString();
         final String pass = Pass.getText().toString();
-        final String Host = mHost.getText().toString();
+
 
         StringRequest strReq;
 
 
-        String url = "https://"+Host+"/api/user_login";
+        String url = "https://"+MyApplication.getInstance().getPrefManager().getHost()+"/api/user_login";
         strReq = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>(){
 
