@@ -1,4 +1,4 @@
-package info.androidhive.gcm.adapter;
+package com.ilocator.utils;
 
 import android.content.Context;
 import androidx.annotation.NonNull;

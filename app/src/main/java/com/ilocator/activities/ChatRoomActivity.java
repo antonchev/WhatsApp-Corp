@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ilocator.R;
-import info.androidhive.gcm.adapter.ChatRoomThreadAdapter;
+import com.ilocator.utils.ChatRoomThreadAdapter;
 
 import com.ilocator.services.gpsService;
 import com.ilocator.utils.EndPoints;
@@ -51,7 +51,7 @@ import info.androidhive.gcm.model.Message;
 import com.ilocator.models.User;
 import com.ilocator.utils.SpeedyLinearLayoutManager;
 
-import static info.androidhive.gcm.adapter.ChatRoomThreadAdapter.getTimeStamp;
+
 
 public class ChatRoomActivity extends AppCompatActivity {
 
