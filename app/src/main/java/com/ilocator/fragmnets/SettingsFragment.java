@@ -25,9 +25,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ilocator.R;
 import com.ilocator.activities.ChatRoomActivity;
 import com.ilocator.activities.MainActivity;
+import com.ilocator.activities.NewMessageActivity;
 import com.ilocator.models.ChatRoom;
 import com.ilocator.utils.ChatRoomsAdapter;
 import com.ilocator.utils.MyApplication;
@@ -61,6 +63,7 @@ public class SettingsFragment extends Fragment  {
     private String mParam1;
     private String mParam2;
     private static final String TAG = "Chat Room";
+    private FloatingActionButton button_new_message;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -281,7 +284,14 @@ public class SettingsFragment extends Fragment  {
         View FragmentSettingView = inflater.inflate(R.layout.fragment_settings, container, false);
 
 
+        FragmentSettingView.findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewMessageActivity.class);
+                startActivity(intent);
 
+            }
+        });
 
 
 
@@ -308,8 +318,7 @@ public class SettingsFragment extends Fragment  {
 
 
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(
                 getContext()
         ));
