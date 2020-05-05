@@ -1,5 +1,7 @@
 package com.ilocator.activities.ui.main;
 
+import android.util.Log;
+
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,16 +15,19 @@ import java.util.ArrayList;
 public class PageViewModel extends ViewModel {
     ArrayList<Contact> contactArrayList;
     MutableLiveData<ArrayList<Contact>> contactLiveData;
+    private String tab;
     private MutableLiveData<Integer> mIndex = new MutableLiveData<>();
     private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
-
+         //   Log.d("ТАБЫ","inPUSSY"+ input);
+         //   Log.d("ТАБЫ", String.valueOf(input));
             return "Hello world from section: " + input;
         }
     });
 
     public PageViewModel () {
+
         contactLiveData = new MutableLiveData<>();
         init();
     }
@@ -51,7 +56,9 @@ public class PageViewModel extends ViewModel {
     }
 
     public void setIndex(int index) {
+       // Log.d("ТАБЫ", String.valueOf(index));
         mIndex.setValue(index);
+
     }
 
     public LiveData<String> getText() {

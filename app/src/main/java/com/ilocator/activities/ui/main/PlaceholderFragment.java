@@ -1,6 +1,7 @@
 package com.ilocator.activities.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ArrayList<Contact> contactArrayList;
     private PageViewModel pageViewModel;
-
+    private int index;
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
@@ -41,11 +42,15 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
+        index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
+
         }
         pageViewModel.setIndex(index);
+       // pageViewModel.getText();
+        Log.d("ТАБЫ","PUSSY"+ index);
+
 
 
     }
@@ -55,6 +60,8 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
         public void onChanged(ArrayList<Contact> userArrayList) {
             mAdapter = new ContactsApdapter(getContext(),userArrayList);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            if (index==1) return; else
             recyclerView.setAdapter(mAdapter);
         }
     };
