@@ -12,20 +12,18 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ilocator.R;
-import com.ilocator.models.ChatRoom;
-import com.ilocator.models.Contacts;
+import com.ilocator.models.Contact;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 
 public class ContactsApdapter extends RecyclerView.Adapter<ContactsApdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<Contacts> contactsArrayList;
+    private ArrayList<Contact> contactArrayList;
     private static String today;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -39,9 +37,9 @@ public class ContactsApdapter extends RecyclerView.Adapter<ContactsApdapter.View
     }
 
 
-    public ContactsApdapter(Context mContext, ArrayList<Contacts> contactsArrayList) {
+    public ContactsApdapter(Context mContext, ArrayList<Contact> contactArrayList) {
         this.mContext = mContext;
-        this.contactsArrayList = contactsArrayList;
+        this.contactArrayList = contactArrayList;
 
 
     }
@@ -56,13 +54,13 @@ public class ContactsApdapter extends RecyclerView.Adapter<ContactsApdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Contacts contacts = contactsArrayList.get(position);
-        holder.name.setText(contacts.getName());
+        Contact contact = contactArrayList.get(position);
+        holder.name.setText(contact.getName());
     }
 
     @Override
     public int getItemCount() {
-        return contactsArrayList.size();
+        return contactArrayList.size();
     }
 
     public static String getTimeStamp(String dateStr) {

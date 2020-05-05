@@ -7,13 +7,13 @@ import java.io.Serializable;
 /**
  * Created by Lincoln on 07/01/16.
  */
-public class Contacts implements Serializable {
+public class Contact implements Serializable {
     String id, name, email, number;
 
-    public Contacts() {
+    public Contact() {
     }
 
-    public Contacts(String id, String name, String number) {
+    public Contact(String id, String name, String number) {
         this.id = id;
         this.name = name;
         this.number = number;
