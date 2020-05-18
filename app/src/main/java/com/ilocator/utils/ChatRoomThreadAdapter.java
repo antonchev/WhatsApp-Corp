@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -20,6 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.ilocator.R;
+import com.squareup.picasso.Picasso;
+
 import info.androidhive.gcm.model.Message;
 
 public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -35,11 +39,13 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView message, timestamp;
+        ImageView img;
 
         public ViewHolder(View view) {
             super(view);
             message = (TextView) itemView.findViewById(R.id.message);
             timestamp = (TextView) itemView.findViewById(R.id.timestamp);
+            img = (ImageView) itemView.findViewById(R.id.img);
         }
     }
 
@@ -63,7 +69,11 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // self message
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_self, parent, false);
-        } else {
+        } else  if (viewType == 200) {
+            // self message
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.chat_item_image, parent, false);
+        } else{
             // others message
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_other, parent, false);
@@ -78,8 +88,27 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public int getItemViewType(int position) {
         Message message = messageArrayList.get(position);
         if (message.getFrom_me()==1) {
+
             return 100;
         }
+        //else
+      //  if (message.getMessage().length()>12) {
+
+       //     int start = 0;
+       //     int end = 12;
+      //      char[] dst = new char[end - start];
+
+      //      String commentText2 = message.getMessage();
+       //     commentText2.getChars(start, end, dst, 0);
+
+       //     String dst2 = new String(dst);
+
+       //     if (dst2.equals("https://fire"))
+       //     {
+       //         Log.d("КАРТИНКА", message.getMessage());
+       //         return 200;
+       //     }
+       // }
 
         return position;
     }
@@ -88,6 +117,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         Message message = messageArrayList.get(position);
         ((ViewHolder) holder).message.setText(message.getMessage());
+        Picasso.get().load(message.getId()).into(((ViewHolder) holder).img);
 
 
 
