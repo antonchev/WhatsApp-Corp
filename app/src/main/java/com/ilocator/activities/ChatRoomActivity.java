@@ -50,7 +50,7 @@ import com.ilocator.utils.MyApplication;
 import info.androidhive.gcm.model.Message;
 import com.ilocator.models.User;
 import com.ilocator.utils.SpeedyLinearLayoutManager;
-
+import com.squareup.picasso.Picasso;
 
 
 public class ChatRoomActivity extends AppCompatActivity {
@@ -334,13 +334,51 @@ public class ChatRoomActivity extends AppCompatActivity {
                             User user = new User(userId, userName, null,null);
 
                             Message message = new Message();
-                            message.setId(commentId);
-                            message.setMessage(commentText);
-                            message.setCreatedAt(createdAt);
-                            message.setUser(user);
-                            message.setFrom_me(from_me);
-                            message.setAuthor(author);
-                            message.setImage("https://wallpapersite.com/images/pages/pic_w/14693.jpg");
+
+
+                            if (commentText.length()>12) {
+
+                                int start = 0;
+                                int end = 12;
+                                char[] dst = new char[end - start];
+
+                                String commentText2 = commentText;
+                                commentText2.getChars(start, end, dst, 0);
+
+                                String dst2 = new String(dst);
+
+                                if (dst2.equals("https://fire"))
+                                {
+
+                                   message.setImage(commentText);
+
+                                    message.setId(commentId);
+
+                                    message.setCreatedAt(createdAt);
+                                    message.setUser(user);
+                                    message.setFrom_me(from_me);
+                                    message.setAuthor(author);
+
+                                }
+                                else
+                                    {
+                                        message.setId(commentId);
+                                        message.setMessage(commentText);
+                                        message.setCreatedAt(createdAt);
+                                        message.setUser(user);
+                                        message.setFrom_me(from_me);
+                                        message.setAuthor(author);
+                                    }
+                            } else {
+
+                                message.setId(commentId);
+                                message.setMessage(commentText);
+                                message.setCreatedAt(createdAt);
+                                message.setUser(user);
+                                message.setFrom_me(from_me);
+                                message.setAuthor(author);
+                            }
+                          //  message.setImage("https://wallpapersite.com/images/pages/pic_w/14693.jpg");
 
 
                             messageArrayList.add(message);

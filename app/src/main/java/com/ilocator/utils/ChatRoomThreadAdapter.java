@@ -69,10 +69,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // self message
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_self, parent, false);
-        } else  if (viewType == 200) {
-            // self message
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.chat_item_image, parent, false);
+        
         } else{
             // others message
             itemView = LayoutInflater.from(parent.getContext())
@@ -91,24 +88,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             return 100;
         }
-        //else
-      //  if (message.getMessage().length()>12) {
 
-       //     int start = 0;
-       //     int end = 12;
-      //      char[] dst = new char[end - start];
-
-      //      String commentText2 = message.getMessage();
-       //     commentText2.getChars(start, end, dst, 0);
-
-       //     String dst2 = new String(dst);
-
-       //     if (dst2.equals("https://fire"))
-       //     {
-       //         Log.d("КАРТИНКА", message.getMessage());
-       //         return 200;
-       //     }
-       // }
 
         return position;
     }
@@ -118,7 +98,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Message message = messageArrayList.get(position);
         ((ViewHolder) holder).message.setText(message.getMessage());
 
-        Picasso.get().load(message.getImage()).into(((ViewHolder) holder).img);
+              Picasso.get().load(message.getImage()).into(((ViewHolder) holder).img);
 
 
 

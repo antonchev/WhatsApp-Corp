@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ilocator.R;
 import com.ilocator.models.Contact;
 import com.ilocator.utils.ContactsApdapter;
+import com.ilocator.utils.SpeedyLinearLayoutManager;
 
 import java.util.ArrayList;
 
@@ -59,7 +60,7 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
         @Override
         public void onChanged(ArrayList<Contact> userArrayList) {
             mAdapter = new ContactsApdapter(getContext(),userArrayList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setLayoutManager(new SpeedyLinearLayoutManager(getContext()));
 
             if (index==1) return; else
             recyclerView.setAdapter(mAdapter);
