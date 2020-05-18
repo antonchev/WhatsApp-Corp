@@ -102,4 +102,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:+'
     implementation 'androidx.lifecycle:lifecycle-extensions:+'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

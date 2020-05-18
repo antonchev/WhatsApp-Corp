@@ -340,6 +340,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             message.setUser(user);
                             message.setFrom_me(from_me);
                             message.setAuthor(author);
+                            message.setImage("https://wallpapersite.com/images/pages/pic_w/14693.jpg");
 
 
                             messageArrayList.add(message);

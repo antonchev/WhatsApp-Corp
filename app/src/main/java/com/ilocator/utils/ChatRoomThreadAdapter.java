@@ -117,7 +117,8 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         Message message = messageArrayList.get(position);
         ((ViewHolder) holder).message.setText(message.getMessage());
-        Picasso.get().load(message.getId()).into(((ViewHolder) holder).img);
+
+        Picasso.get().load(message.getImage()).into(((ViewHolder) holder).img);
 
 
 
