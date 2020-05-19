@@ -18,6 +18,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,11 +78,11 @@ public class MainActivity extends AppCompatActivity{
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build();
 
-
+          //  long[] vibrate = new long[] { 300, 1000, 300, 1000, 300 };
+            notificationChannel.enableVibration(true);
+           // notificationChannel.setVibrationPattern(vibrate);
             notificationChannel.setSound(notification_sound, attributes);//for enable sound
-
             notificationChannel.enableLights(true);
-
             notificationManager.createNotificationChannel(notificationChannel);
         }
 

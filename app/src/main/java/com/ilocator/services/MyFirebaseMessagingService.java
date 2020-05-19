@@ -40,6 +40,7 @@ import com.ilocator.models.User;
 import com.ilocator.utils.MyApplication;
 
 
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -260,11 +261,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, "1")
-                        .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                        .setSmallIcon(R.drawable.ic_music_and_multimedia)
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
-                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                        .setColor(ContextCompat.getColor(getBaseContext(), R.color.red))
+                        .setVibrate(new long[]{0, 10, 100, 10})
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
