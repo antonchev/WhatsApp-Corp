@@ -2,34 +2,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingTop="5dp"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
-    <ImageView
-        android:id="@+id/img"
+    android:paddingRight="2dp"
+    android:paddingBottom="5dp">
 
+
+    <RelativeLayout
+        android:id="@+id/Re4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="50dp"
-        android:textIsSelectable="true"
-        android:padding="10dp"
+        android:background="@drawable/bg_bubble_gray">
 
-        />
-    <TextView
-        android:id="@+id/message"
-        android:text="Привет"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="50dp"
-        android:textIsSelectable="true"
-        android:padding="10dp"
-        android:background="@drawable/bg_bubble_gray"
-        android:textSize="14dp" />
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginRight="3dp"
+            android:textIsSelectable="true"
+
+         />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="3dp"
+
+            android:padding="10dp"
+            android:text="Привет"
+            android:textIsSelectable="true"
+
+            android:textSize="14dp" />
+
+
+
+    </RelativeLayout>
+
 
     <TextView
         android:text="Минутуназад"
@@ -37,12 +51,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/message"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="10dp"
+        android:layout_below="@id/Re4"
+
+        android:paddingBottom="10dp"
+
         android:paddingTop="6dp"
         android:textSize="10dp" />
-
 
 </RelativeLayout>
