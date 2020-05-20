@@ -1,5 +1,7 @@
 package com.ilocator.activities.ui.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -31,6 +35,8 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
     private ArrayList<Contact> contactArrayList;
     private PageViewModel pageViewModel;
     private int index;
+    private static final int REQUEST_CODE_READ_CONTACTS=1;
+    private static boolean READ_CONTACTS_GRANTED =false;
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
@@ -59,6 +65,9 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
     Observer<ArrayList<Contact>> userListUpdateObserver = new Observer<ArrayList<Contact>>() {
         @Override
         public void onChanged(ArrayList<Contact> userArrayList) {
+
+
+
             mAdapter = new ContactsApdapter(getContext(),userArrayList);
             recyclerView.setLayoutManager(new SpeedyLinearLayoutManager(getContext()));
 
@@ -66,6 +75,25 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
             recyclerView.setAdapter(mAdapter);
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+
+        switch (requestCode){
+            case REQUEST_CODE_READ_CONTACTS:
+                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    READ_CONTACTS_GRANTED = true;
+                }
+        }
+        if(READ_CONTACTS_GRANTED){
+         //   loadContacts();
+            Log.d("Заебомба","Контакты");
+        }
+        else{
+            Log.d("Запрещено","Контакты");
+           // Toast.makeText(this, "Требуется установить разрешения", Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public View onCreateView(
@@ -78,7 +106,23 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
 
 
         contactArrayList = new ArrayList<>();
-        pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
+
+        int hasReadContactPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        // если устройство до API 23, устанавливаем разрешение
+        if(hasReadContactPermission == PackageManager.PERMISSION_GRANTED){
+            READ_CONTACTS_GRANTED = true;
+        }
+        else{
+            // вызываем диалоговое окно для установки разрешений
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACTS);
+        }
+        // если разрешение установлено, загружаем контакты
+        if (READ_CONTACTS_GRANTED){
+           // pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
+        }
+
+
+        //pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
 
         return root;
     }
