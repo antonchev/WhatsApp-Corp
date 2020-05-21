@@ -48,7 +48,8 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
+
+        pageViewModel = new PageViewModel(getContext());
         index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
@@ -69,7 +70,7 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
 
 
             mAdapter = new ContactsApdapter(getContext(),userArrayList);
-            recyclerView.setLayoutManager(new SpeedyLinearLayoutManager(getContext()));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
             if (index==1) return; else
             recyclerView.setAdapter(mAdapter);
@@ -122,7 +123,7 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
         }
 
 
-        //pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
+        pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
 
         return root;
     }

@@ -8,7 +8,10 @@ import java.io.Serializable;
  * Created by Lincoln on 07/01/16.
  */
 public class Contact implements Serializable {
-    String id, name, email, number;
+    private String name;
+    private String id;
+    private String number;
+
 
     public Contact() {
     }
