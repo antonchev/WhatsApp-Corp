@@ -41,16 +41,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ilocator.R;
-import com.ilocator.utils.ChatRoomThreadAdapter;
+import com.ilocator.utils.ChatMsgAdapter;
 
-import com.ilocator.services.gpsService;
-import com.ilocator.utils.EndPoints;
 import com.ilocator.utils.MyApplication;
 
 import info.androidhive.gcm.model.Message;
 import com.ilocator.models.User;
 import com.ilocator.utils.SpeedyLinearLayoutManager;
-import com.squareup.picasso.Picasso;
 
 
 public class ChatRoomActivity extends AppCompatActivity {
@@ -59,7 +56,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private String chatRoomId;
     private RecyclerView recyclerView;
-    private ChatRoomThreadAdapter mAdapter;
+    private ChatMsgAdapter mAdapter;
     private ArrayList<Message> messageArrayList;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private EditText inputMessage;
@@ -105,7 +102,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         // self user id is to identify the message owner
         String selfUserId = MyApplication.getInstance().getPrefManager().getUser().getId();
 
-        mAdapter = new ChatRoomThreadAdapter(this, messageArrayList, selfUserId);
+        mAdapter = new ChatMsgAdapter(this, messageArrayList, selfUserId);
 
         LinearLayoutManager layoutManager = new SpeedyLinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

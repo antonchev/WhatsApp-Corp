@@ -1,14 +1,9 @@
 package com.ilocator.utils;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +21,9 @@ import com.squareup.picasso.Picasso;
 
 import info.androidhive.gcm.model.Message;
 
-public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ChatMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static String TAG = ChatRoomThreadAdapter.class.getSimpleName();
+    private static String TAG = ChatMsgAdapter.class.getSimpleName();
 
     private String userId;
     private int SELF = 100;
@@ -50,7 +45,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    public ChatRoomThreadAdapter(Context mContext, ArrayList<Message> messageArrayList, String userId) {
+    public ChatMsgAdapter(Context mContext, ArrayList<Message> messageArrayList, String userId) {
         this.mContext = mContext;
         this.messageArrayList = messageArrayList;
         this.userId = userId;

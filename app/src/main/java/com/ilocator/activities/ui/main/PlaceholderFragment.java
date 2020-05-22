@@ -88,6 +88,7 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
         }
         if(READ_CONTACTS_GRANTED){
          //   loadContacts();
+            pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
             Log.d("Заебомба","Контакты");
         }
         else{
@@ -119,11 +120,11 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
         }
         // если разрешение установлено, загружаем контакты
         if (READ_CONTACTS_GRANTED){
-           // pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
+            pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
         }
 
 
-        pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
+      //  pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
 
         return root;
     }

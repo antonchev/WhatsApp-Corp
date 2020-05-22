@@ -47,7 +47,7 @@ public class Contact implements Serializable {
     }
 
     public void setNumber(String number) {
-        this.name = number;
+        this.number = number;
     }
 }
 

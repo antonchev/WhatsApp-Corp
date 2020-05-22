@@ -73,8 +73,9 @@ public class PageViewModel extends ViewModel {
                 String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 //String photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
                 Contact contact = new Contact();
+
+                contact.setNumber(phoneNo);
                 contact.setName(name);
-                contact.setId(name);
                 Log.e("contact", "getAllContacts: " + name + " " + phoneNo);
                 contactArrayList.add(contact);
                 Log.d("ПО ОДНОМУ",contact.getName());
