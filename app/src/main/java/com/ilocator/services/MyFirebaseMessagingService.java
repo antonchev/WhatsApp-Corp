@@ -50,6 +50,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * NOTE: There can only be one service in each app that receives FCM messages. If multiple
@@ -72,7 +73,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
     // [START receive_message]
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         String to_phone, msg_text;
@@ -166,21 +167,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         info.androidhive.gcm.model.Message message = new info.androidhive.gcm.model.Message();
         message.setId(cid);
         message.setMessage(msg_text);
-
-
-
         message.setCreatedAt(dt_ins);
         message.setUser(user);
         message.setFrom_me(from_me);
-
         if (Author!=null)
         message.setAuthor(Author);
-
-
-
-
-
-
 
         Intent pushNotification = new Intent(PUSH_NOTIFICATION);
         pushNotification.putExtra("to_phone", phone);
@@ -275,7 +266,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Since android Oreo notification channel is needed.
 
+        int id = createID();
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(id /* ID of notification */, notificationBuilder.build());
+    }
+
+    public int createID(){
+        Date now = new Date();
+
+        int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
+        return id;
     }
 }

@@ -49,6 +49,22 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        int hasReadContactPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        // если устройство до API 23, устанавливаем разрешение
+        if(hasReadContactPermission == PackageManager.PERMISSION_GRANTED){
+            READ_CONTACTS_GRANTED = true;
+        }
+        else{
+            // вызываем диалоговое окно для установки разрешений
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACTS);
+        }
+        // если разрешение установлено, загружаем контакты
+        if (READ_CONTACTS_GRANTED){
+            pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
+        }
+
+
         pageViewModel = new PageViewModel(getContext());
         index = 1;
         if (getArguments() != null) {
@@ -109,19 +125,6 @@ public class PlaceholderFragment extends Fragment implements LifecycleOwner {
 
         contactArrayList = new ArrayList<>();
 
-        int hasReadContactPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
-        // если устройство до API 23, устанавливаем разрешение
-        if(hasReadContactPermission == PackageManager.PERMISSION_GRANTED){
-            READ_CONTACTS_GRANTED = true;
-        }
-        else{
-            // вызываем диалоговое окно для установки разрешений
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACTS);
-        }
-        // если разрешение установлено, загружаем контакты
-        if (READ_CONTACTS_GRANTED){
-            pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
-        }
 
 
       //  pageViewModel.getContactMutableLiveData().observe((LifecycleOwner) getContext(), userListUpdateObserver);
